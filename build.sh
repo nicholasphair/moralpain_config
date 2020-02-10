@@ -17,12 +17,19 @@ fi
 # If the folder is empty, build it.
 echo '===---------- Building LLVM and clang ----------==='
 cd /llvm/build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel \
-      -DLLVM_ENABLE_ASSERTIONS=OFF \
-      -DCMAKE_C_COMPILER=$C \
-      -DCMAKE_CXX_COMPILER=$CXX \
-      ..
-make -j4
+
+cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang
+;clang-tools-extra;libcxx" -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON -DCMAKE_INS
+TALL_PREFIX="/usr/bin/gcc" ..
+
+cmake --build . --target install
+
+#cmake -DCMAKE_BUILD_TYPE=MinSizeRel \
+#      -DLLVM_ENABLE_ASSERTIONS=OFF \
+#      -DCMAKE_C_COMPILER=$C \
+#      -DCMAKE_CXX_COMPILER=$CXX \
+#      ..
+#make -j4
 cd -
 
 # If the project build folder doesn't exist yet, create it.
