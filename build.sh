@@ -18,7 +18,7 @@ fi
 echo '===---------- Building LLVM and clang ----------==='
 cd /llvm/build
 
-cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;libcxx" -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON -DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" ..
+cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=RelWithDebInfo  -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON -DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" ..
 
 cmake --build . --target install
 
