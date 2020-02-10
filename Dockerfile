@@ -13,10 +13,10 @@ RUN wget -O - 'http://apt.llvm.org/llvm-snapshot.gpg.key' | apt-key add - \
     >> /etc/apt/sources.list
 
 # Install clang-3.9
-RUN apt-get update -y && apt-get install -y clang-3.9
+RUN apt-get update -y && apt-get install -y clang
 
-ENV C clang-3.9
-ENV CXX clang++-3.9
+ENV C clang
+ENV CXX clang++
 
 # Grab LLVM and clang.
 RUN git clone --progress --verbose \

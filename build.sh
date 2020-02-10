@@ -18,7 +18,7 @@ fi
 echo '===---------- Building LLVM and clang ----------==='
 cd /llvm/build
 
-cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON ..
+cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON ..
 
 #-DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" 
 
