@@ -6,13 +6,13 @@ RUN apt-get update  -y \
     && apt-get install -y git cmake vim make wget gnupg apt-utils ninja-build
 
 # Get LLVM apt repositories.
-RUN wget -O - 'http://apt.llvm.org/llvm-snapshot.gpg.key' | apt-key add - \
-    && echo 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' \
-    >> /etc/apt/sources.list \
-    && echo 'deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' \
-    >> /etc/apt/sources.list
+#RUN wget -O - 'http://apt.llvm.org/llvm-snapshot.gpg.key' | apt-key add - \
+#    && echo 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' \
+#    >> /etc/apt/sources.list \
+#    && echo 'deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main' \
+#    >> /etc/apt/sources.list
 
-# Install clang-3.9
+# Install clang
 RUN apt-get update -y && apt-get install -y clang
 
 ENV C clang
