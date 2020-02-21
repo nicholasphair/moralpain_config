@@ -18,7 +18,11 @@ fi
 echo '===---------- Building LLVM and clang ----------==='
 cd /llvm/build
 
-cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON ..
+cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON ..
+
+ninja stage2-instrumented
+ninja stage2-instrumented-generate-profdata
+ninja stage2
 
 #-DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" 
 
