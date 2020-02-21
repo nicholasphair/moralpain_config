@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # If the LLVM build folder doesn't exist yet, create it.
-if [[ ! -d /llvm/build ]]; then
+if [[ ! -d /llvm/build ]]; then 
   echo '===---------- Creating /llvm/build folder ----------==='
   mkdir -p /llvm/build
 fi
