@@ -42,7 +42,6 @@ COPY ./build.sh .
 RUN ["chmod", "755","./build.sh"]
 RUN ["bash","./build.sh"]
 
-RUN apt-get -y install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm
-
-RUN git clone --progress --verbose \
-    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
+## If the peirce repo already contains g3log, then no point of doing all this, I think.
+#RUN git clone --progress --verbose \
+#    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install

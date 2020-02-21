@@ -26,7 +26,7 @@ ninja stage2
 
 #-DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" 
 
-cmake --build . 
+cmake --build . --target install
 
 #cmake -DCMAKE_BUILD_TYPE=MinSizeRel \
 #      -DLLVM_ENABLE_ASSERTIONS=OFF \
