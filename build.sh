@@ -1,5 +1,31 @@
 #!/bin/bash
 
+cd /root 
+curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
+curl -L https://github.com/leanprover/lean/releases/download/v3.4.2/lean-3.4.2-linux.tar.gz > lean.tar.gz
+gunzip lean.tar.gz
+tar -xvf lean.tar
+cd lean-3.4.2-linux
+cp -r bin/ /usr/
+cp -r lib/ /usr/
+cp -r include/ /usr/
+cd ..
+rm -rf lean.tar
+rm -rf lean-3.4.2-linux
+
+curl https://raw.githubusercontent.com/kevinsullivan/phys/master/src/orig/vec.lean > vec.lean
+
+git clone https://github.com/leanprover-community/mathlib.git
+git clone https://github.com/kevinsullivan/dm.s20.git
+cd mathlib
+git checkout --detach 05457fdd93d4d12b6d897e174639d81d393c8d8b
+cd ../dm.s20
+leanpkg configure
+leanpkg build
+cd ..
+mv mathlib mathlib_uncompiled
+move /peirce/dm.s20/_target/deps/mathlib mathlib
+
 # If the LLVM build folder doesn't exist yet, create it.
 if [[ ! -d /llvm/build ]]; then 
   echo '===---------- Creating /llvm/build folder ----------==='
@@ -13,7 +39,7 @@ if [[ $? -eq 0 ]]; then
 else
   export CXX=clang++
 fi
-
+                           
 # If the folder is empty, build it.
 echo '===---------- Building LLVM and clang ----------==='
 cd /llvm/build
@@ -34,7 +60,15 @@ cmake --build .
 #      -DCMAKE_CXX_COMPILER=$CXX \
 #      ..
 #make -j4
+cmake install
+
 cd -
+
+#first install elan
+#then curl lean
+#
+
+
 
 # If the project build folder doesn't exist yet, create it.
 #if [[ ! -d /User/isprime/peirce/build ]]; then
