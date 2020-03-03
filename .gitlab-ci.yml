@@ -5,7 +5,8 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t registry.cs.virginia.edu:5005/ae8rh/peircedockerbuildercopy . --no-cache -m 16g
+    - docker build -t andrewe8/andrewpeircetest . --no-cache -m 16g
+    - docker push andrewe8/andrewpeircetest
     - echo 1 > output.txt
 
   artifacts:
