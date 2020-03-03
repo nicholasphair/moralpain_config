@@ -1,6 +1,5 @@
-#!/bin/bash
-
-cd /root 
+echo 1
+cd /root
 curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
 curl -L https://github.com/leanprover/lean/releases/download/v3.4.2/lean-3.4.2-linux.tar.gz > lean.tar.gz
 gunzip lean.tar.gz
@@ -24,7 +23,7 @@ leanpkg configure
 leanpkg build
 cd ..
 mv mathlib mathlib_uncompiled
-move /peirce/dm.s20/_target/deps/mathlib mathlib
+mv dm.s20/_target/deps/mathlib mathlib
 
 # If the LLVM build folder doesn't exist yet, create it.
 if [[ ! -d /llvm/build ]]; then 
@@ -44,10 +43,8 @@ fi
 echo '===---------- Building LLVM and clang ----------==='
 cd /llvm/build
 
-cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON ..
+cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON ..
 
-ninja stage2-instrumented
-ninja stage2-instrumented-generate-profdata
 ninja stage2
 
 #-DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" 
