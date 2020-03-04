@@ -31,13 +31,15 @@ RUN ["apt-get","install","g++","-y"]
 
 # install lean using elan
 RUN ["apt","install","git","curl","-y"]
-RUN curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
+#RUN curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
 
 # These volumes should be mounted as named volumes.
-VOLUME /llvm/build /pierce
+VOLUME /llvm/build /peirce
 
-WORKDIR /pierce
+WORKDIR /root
 COPY ./build.sh .
+
+ENV LEAN_PATH /root/:/root/.elan/toolchains/stable/lib/lean/library:/root/mathlib/src
 
 RUN ["chmod", "755","./build.sh"]
 RUN ["bash","./build.sh"]
