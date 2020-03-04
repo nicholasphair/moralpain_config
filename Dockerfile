@@ -37,13 +37,47 @@ RUN ["apt","install","git","curl","-y"]
 VOLUME /llvm/build /peirce
 
 WORKDIR /root
-COPY ./build.sh .
+#COPY ./build.sh .
 
 ENV LEAN_PATH /root/:/root/.elan/toolchains/stable/lib/lean/library:/root/mathlib/src
-
-RUN ["chmod", "755","./build.sh"]
-RUN ["bash","./build.sh"]
 
 ## If the peirce repo already contains g3log, then no point of doing all this, I think.
 #RUN git clone --progress --verbose \
 #    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
+
+RUN curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
+RUN curl -L https://github.com/leanprover/lean/releases/download/v3.4.2/lean-3.4.2-linux.tar.gz > lean.tar.gz
+RUN gunzip lean.tar.gz
+RUN tar -xvf lean.tar
+RUN cp -r lean-3.4.2-linux/bin/ /usr/
+RUN cp -r lean-3.4.2-linux/lib/ /usr/
+RUN cp -r lean-3.4.2-linux/include/ /usr/
+RUN rm -rf lean.tar
+RUN rm -rf lean-3.4.2-linux
+
+RUN curl https://raw.githubusercontent.com/kevinsullivan/phys/master/src/orig/vec.lean > vec.lean
+RUN git clone https://github.com/leanprover-community/mathlib.git
+RUN git clone https://github.com/kevinsullivan/dm.s20.git
+
+WORKDIR /root/mathlib
+RUN git checkout --detach 05457fdd93d4d12b6d897e174639d81d393c8d8b
+
+WORKDIR /root/dm.s20
+RUN leanpkg configure
+RUN leanpkg build
+
+WORKDIR /root
+RUN mv mathlib mathlib_uncompiled
+RUN mv dm.s20/_target/deps/mathlib mathlib
+RUN mkdir -p /llvm/build
+
+WORKDIR /llvm/build
+# The following "&& ninja stage2" is a hack to get the build to start
+# If this is split up as two steps, the files are not found and the /root/llvm/build directory is empty
+RUN cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .. && ninja stage2
+
+# I don't know if these steps execute correctly, my build runs out of memory during the previous step.
+RUN cmake --build . --target install
+RUN cmake install
+
+#-DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" 
