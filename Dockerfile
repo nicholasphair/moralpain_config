@@ -42,7 +42,7 @@ COPY ./build.sh .
 ENV LEAN_PATH /root/:/root/.elan/toolchains/stable/lib/lean/library:/root/mathlib/src
 
 RUN ["chmod", "755","./build.sh"]
-RUN ["cat", "./build.sh", "|", "tr", "-d", "'\r'", ">", "./build.sh"]
+RUN ["build.sh", ">", "tr", "-d", "'\r'", ">", "build.sh"]
 RUN ["bash","./build.sh"]
 
 RUN apt-get -y install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm
