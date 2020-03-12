@@ -74,8 +74,11 @@ RUN mkdir -p /llvm/build
 WORKDIR /llvm/build
 # The following "&& ninja stage2" is a hack to get the build to start
 # If this is split up as two steps, the files are not found and the /root/llvm/build directory is empty
-CMD ["cmake","-G","'Ninja'","-DCMAKE_BUILD_TYPE=Release","-DCLANG_ENABLE_BOOTSTRAP=On","-DCMAKE_C_COMPILER=$C","-DCMAKE_CXX_COMPILER=$CXX","-LLVM_USE_LINKER=gnu.ld","-LLVM_PARALLEL_LINK_JOBS=1","-DLLVM_ENABLE_ASSERTIONS=ON","-DLLVM_ENABLE_RTTI=ON","-DLLVM_ENABLE_EH=ON",".."] 
-CMD ["ninja", "stage2"]
+RUN ["chmod", "755","./build.sh"]
+RUN ["bash","./build.sh"]
+
+#CMD ["cmake","-G","'Ninja'","-DCMAKE_BUILD_TYPE=Release","-DCLANG_ENABLE_BOOTSTRAP=On","-DCMAKE_C_COMPILER=$C","-DCMAKE_CXX_COMPILER=$CXX","-LLVM_USE_LINKER=gnu.ld","-LLVM_PARALLEL_LINK_JOBS=1","-DLLVM_ENABLE_ASSERTIONS=ON","-DLLVM_ENABLE_RTTI=ON","-DLLVM_ENABLE_EH=ON",".."] 
+#CMD ["ninja", "stage2"]
 
 # I don't know if these steps execute correctly, my build runs out of memory during the previous step.
 RUN cmake --build . --target install
