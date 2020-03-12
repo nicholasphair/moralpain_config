@@ -71,7 +71,7 @@ RUN mv mathlib mathlib_uncompiled
 RUN mv dm.s20/_target/deps/mathlib mathlib
 
 WORKDIR /root
-COPY ./build.sh
+COPY ./build.sh .
 # The following "&& ninja stage2" is a hack to get the build to start
 # If this is split up as two steps, the files are not found and the /root/llvm/build directory is empty
 RUN ["chmod", "755","./build.sh"]
