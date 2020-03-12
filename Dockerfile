@@ -41,7 +41,7 @@ COPY ./build.sh .
 
 ENV LEAN_PATH /root/:/root/.elan/toolchains/stable/lib/lean/library:/root/mathlib/src
 
-RUN ["tr","-d","'\r'","<","./build.sh",">","./build2.sh"]
+CMD ["tr","-d","'\r'","<","./build.sh",">","./build2.sh"]
 RUN ["chmod", "755","./build.sh"]
 RUN ["bash","./build.sh"]
 
