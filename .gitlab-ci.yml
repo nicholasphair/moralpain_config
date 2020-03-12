@@ -5,7 +5,7 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t andrewe8/andrewpeircetest . -m 16g
+    - docker build -t andrewe8/andrewpeircetest . -m 16g --no-cache
     - docker push andrewe8/andrewpeircetest
     - echo 1 > output.txt
 
