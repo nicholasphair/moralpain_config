@@ -69,9 +69,8 @@ RUN leanpkg build
 WORKDIR /root
 RUN mv mathlib mathlib_uncompiled
 RUN mv dm.s20/_target/deps/mathlib mathlib
-RUN mkdir -p /llvm/build
 
-WORKDIR /llvm/build
+WORKDIR /root
 # The following "&& ninja stage2" is a hack to get the build to start
 # If this is split up as two steps, the files are not found and the /root/llvm/build directory is empty
 RUN ["chmod", "755","./build.sh"]
