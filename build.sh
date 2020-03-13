@@ -1,4 +1,3 @@
-
 # If the LLVM build folder doesn't exist yet, create it.
 if [[ ! -d /llvm/build ]]; then 
   echo '===---------- Creating /llvm/build folder ----------==='
@@ -22,5 +21,3 @@ cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_
 ninja stage2
 
 cmake --build . 
-
-cmake install
