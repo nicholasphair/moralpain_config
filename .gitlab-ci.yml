@@ -5,15 +5,13 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t andrewe8/andrewpeircetest . -m 16g --no-cache
-    - docker push andrewe8/andrewpeircetest
+    - docker build -t dockerlocal . -m 16g --no-cache
+    - docker tag dockerlocal gitlab.cs.virginia.edu:5099/physicalsemantics/peirce-docker-builder
+    - docker push gitlab.cs.virginia.edu:5099/physicalsemantics/peirce-docker-builder
+    - docker tag dockerlocal gitlab.cs.virginia.edu:5099/physicalsemantics/peirce
+    - docker push gitlab.cs.virginia.edu:5099/physicalsemantics/peirce
     - echo 1 > output.txt
 
   artifacts:
     paths:
       - output.txt
-test:
-  stage: test
-  script:
-    - echo "Testing!"
-    - exit 0
