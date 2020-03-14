@@ -74,13 +74,18 @@ WORKDIR /root
 COPY ./build.sh .
 # The following "&& ninja stage2" is a hack to get the build to start
 # If this is split up as two steps, the files are not found and the /root/llvm/build directory is empty
-RUN ["chmod", "755","./build.sh"]
-RUN ["bash","./build.sh"]
+#RUN ["chmod", "755","./build.sh"]
+#RUN ["bash","./build.sh"]
 
+CMD "mkdir -p /llvm/build"
+#ENV CXX clang++
+WORKDIR /llvm/build
+CMD "cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .."
+CMD "ninja stage2"
 #CMD ["cmake","-G","'Ninja'","-DCMAKE_BUILD_TYPE=Release","-DCLANG_ENABLE_BOOTSTRAP=On","-DCMAKE_C_COMPILER=$C","-DCMAKE_CXX_COMPILER=$CXX","-LLVM_USE_LINKER=gnu.ld","-LLVM_PARALLEL_LINK_JOBS=1","-DLLVM_ENABLE_ASSERTIONS=ON","-DLLVM_ENABLE_RTTI=ON","-DLLVM_ENABLE_EH=ON",".."] 
 #CMD ["ninja", "stage2"]
 
-#RUN cmake --build .
+RUN cmake --build .
 
 
 RUN apt-get -y install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm gdb gdbserver
