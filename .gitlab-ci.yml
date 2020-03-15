@@ -1,7 +1,3 @@
-image:
-  name: gcr.io/kaniko-project/executor:debug
-  entrypoint: [""] 
-
 stages:
   - build
   - test
@@ -9,12 +5,14 @@ stages:
 build:
   stage: build
   script:
-    - echo "Hi Kevin, Running Kaniko"
-    - echo "{\"auths\":{\"gitlab.cs.virginia.edu\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE
+    - docker build -t dockerlocal . -m 32g
+    - docker tag dockerlocal gitlab.cs.virginia.edu:5099/physicalsemantics/peirce
+    - docker push gitlab.cs.virginia.edu:5099/physicalsemantics/peirce
+    - docker tag dockerlocal gitlab.cs.virginia.edu:5099/physicalsemantics/peirce-docker-builder
+    - docker push gitlab.cs.virginia.edu:5099/physicalsemantics/peirce-docker-builder
 
-test:
-  stage: test
-  script:
-    - echo "Testing!"
-    - exit 0
+    - echo 1 > output.txt
+
+  artifacts:
+    paths:
+      - output.txt
