@@ -6,7 +6,6 @@ build:
   stage: build
   script:
     - docker build -t dockerlocal . -m 16g
-    - docker login gitlab.cs.virginia.edu:5099 -u ae8rh -p GitLabAE20
     - docker tag dockerlocal gitlab.cs.virginia.edu:5099/physicalsemantics/peirce
     - docker push gitlab.cs.virginia.edu:5099/physicalsemantics/peirce
     - docker tag dockerlocal gitlab.cs.virginia.edu:5099/physicalsemantics/peirce-docker-builder
