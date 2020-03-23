@@ -44,7 +44,6 @@ ENV LEAN_PATH /root/:/root/.elan/toolchains/stable/lib/lean/library:/root/mathli
 ## If the peirce repo already contains g3log, then no point of doing all this, I think.
 #RUN git clone --progress --verbose \
 #    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
-
 RUN curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
 RUN curl -L https://github.com/leanprover/lean/releases/download/v3.4.2/lean-3.4.2-linux.tar.gz > lean.tar.gz
 RUN gunzip lean.tar.gz
@@ -69,15 +68,33 @@ RUN leanpkg build
 WORKDIR /root
 RUN mv mathlib mathlib_uncompiled
 RUN mv dm.s20/_target/deps/mathlib mathlib
-RUN mkdir -p /llvm/build
 
-WORKDIR /llvm/build
+WORKDIR /root
+COPY ./build.sh .
 # The following "&& ninja stage2" is a hack to get the build to start
 # If this is split up as two steps, the files are not found and the /root/llvm/build directory is empty
-RUN cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .. && ninja stage2
+#RUN ["chmod", "755","./build.sh"]
+#RUN ["bash","./build.sh"]
 
-# I don't know if these steps execute correctly, my build runs out of memory during the previous step.
-RUN cmake --build . --target install
-RUN cmake install
+CMD "mkdir -p /llvm/build"
+#ENV CXX clang++
+WORKDIR /llvm/build
+RUN cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .. && cmake --build .
+WORKDIR /llvm/build
+#RUN ninja stage2
+
+#RUN "cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .."
+#RUN "ninja stage2"
+#CMD ["cmake","-G","'Ninja'","-DCMAKE_BUILD_TYPE=Release","-DCLANG_ENABLE_BOOTSTRAP=On","-DCMAKE_C_COMPILER=$C","-DCMAKE_CXX_COMPILER=$CXX","-LLVM_USE_LINKER=gnu.ld","-LLVM_PARALLEL_LINK_JOBS=1","-DLLVM_ENABLE_ASSERTIONS=ON","-DLLVM_ENABLE_RTTI=ON","-DLLVM_ENABLE_EH=ON",".."] 
+#CMD ["ninja", "stage2"]
+# WORKDIR /llvm/build
+#RUN ls /llvm/build
+#RUN cd /llvm/build && cmake --build .
+
+
+RUN apt-get -y install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm gdb gdbserver
+
+RUN git clone --progress --verbose \
+    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
 
 #-DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" 
