@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:18.04
 MAINTAINER <cch3dc@virginia.edu>
 
 # Install packages.
@@ -48,55 +48,45 @@ ENV LEAN_PATH /root/:/root/.elan/toolchains/stable/lib/lean/library:/root/mathli
 RUN curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
 RUN curl -L https://github.com/leanprover/lean/releases/download/v3.4.2/lean-3.4.2-linux.tar.gz > lean.tar.gz
 RUN gunzip lean.tar.gz
-RUN tar -xvf lean.tar
-RUN cp -r lean-3.4.2-linux/bin/ /usr/
-RUN cp -r lean-3.4.2-linux/lib/ /usr/
-RUN cp -r lean-3.4.2-linux/include/ /usr/
-RUN rm -rf lean.tar
-RUN rm -rf lean-3.4.2-linux
 
-RUN curl https://raw.githubusercontent.com/kevinsullivan/phys/master/src/orig/vec.lean > vec.lean
-RUN git clone https://github.com/leanprover-community/mathlib.git
-RUN git clone https://github.com/kevinsullivan/dm.s20.git
+# ROS installation
 
-WORKDIR /root/mathlib
-RUN git checkout --detach 05457fdd93d4d12b6d897e174639d81d393c8d8b
+RUN apt-get update
+RUN apt-get -y install lsb-release
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+RUN cat /etc/apt/sources.list.d/ros-latest.list
 
-WORKDIR /root/dm.s20
-RUN leanpkg configure
-RUN leanpkg build
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
+RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | apt-key add -
 
-WORKDIR /root
-RUN mv mathlib mathlib_uncompiled
-RUN mv dm.s20/_target/deps/mathlib mathlib
+RUN apt update
+ENV DEBIAN_FRONTEND=noninteractive
 
-WORKDIR /root
-COPY ./build.sh .
-# The following "&& ninja stage2" is a hack to get the build to start
-# If this is split up as two steps, the files are not found and the /root/llvm/build directory is empty
-#RUN ["chmod", "755","./build.sh"]
-#RUN ["bash","./build.sh"]
+# We may want to change this to headless (ros-melodic-ros-base) in future
+RUN apt-get -y install ros-melodic-desktop-full
 
-CMD "mkdir -p /llvm/build"
-#ENV CXX clang++
-WORKDIR /llvm/build
-RUN cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .. && cmake --build .
-WORKDIR /llvm/build
-#RUN ninja stage2
+RUN apt-get -y install python-pip
+RUN pip install -U rosdep
 
-#RUN "cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .."
-#RUN "ninja stage2"
-#CMD ["cmake","-G","'Ninja'","-DCMAKE_BUILD_TYPE=Release","-DCLANG_ENABLE_BOOTSTRAP=On","-DCMAKE_C_COMPILER=$C","-DCMAKE_CXX_COMPILER=$CXX","-LLVM_USE_LINKER=gnu.ld","-LLVM_PARALLEL_LINK_JOBS=1","-DLLVM_ENABLE_ASSERTIONS=ON","-DLLVM_ENABLE_RTTI=ON","-DLLVM_ENABLE_EH=ON",".."] 
-#CMD ["ninja", "stage2"]
-# WORKDIR /llvm/build
-#RUN ls /llvm/build
-#RUN cd /llvm/build && cmake --build .
+RUN rosdep init
+RUN rosdep update
+RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+RUN apt -y install python-rosinstall python-rosinstall-generator python-wstool build-essential
 
+# additional ROS packages for move-base/gazebo, etc.
+RUN apt-get install -y ros-melodic-controller-manager
+RUN apt-get install -y ros-melodic-move-base
+RUN apt-get install -y ros-melodic-twist-mux
+RUN apt-get install -y ros-melodic-robot-localization
+RUN apt-get install -y ros-melodic-interactive-marker-twist-server
+RUN apt-get install -y ros-melodic-rviz-imu-plugin
+RUN apt-get install -y ros-melodic-hector-gazebo-plugins
+RUN apt-get install -y ros-melodic-gazebo-plugins
+RUN apt-get install -y ros-melodic-dwa-local-planner
+RUN apt-get install -y ros-melodic-gazebo-ros-control
+RUN apt-get install -y ros-melodic-diff-drive-controller
+RUN apt-get install -y ros-melodic-pointcloud-to-laserscan
+RUN apt-get install -y ros-melodic-joint-state-controller
 
-RUN apt-get -y install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm gdb gdbserver
-
-RUN git clone --progress --verbose \
-    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
-
-
-#-DCMAKE_INSTALL_PREFIX="/usr/bin/gcc" 
+WORKDIR /
