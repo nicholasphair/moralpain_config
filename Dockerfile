@@ -29,25 +29,15 @@ RUN git clone --progress --verbose \
 # install g++
 RUN ["apt-get","install","g++","-y"]
 
-# install lean using elan
-RUN ["apt","install","git","curl","-y"]
-#RUN curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
-
 # These volumes should be mounted as named volumes.
 VOLUME /llvm/build /peirce
 
 WORKDIR /root
 #COPY ./build.sh .
 
-ENV LEAN_PATH /root/:/root/.elan/toolchains/stable/lib/lean/library:/root/mathlib/src
-
 ## If the peirce repo already contains g3log, then no point of doing all this, I think.
 #RUN git clone --progress --verbose \
 #    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
-
-RUN curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- -y
-RUN curl -L https://github.com/leanprover/lean/releases/download/v3.4.2/lean-3.4.2-linux.tar.gz > lean.tar.gz
-RUN gunzip lean.tar.gz
 
 # ROS installation
 
@@ -90,3 +80,16 @@ RUN apt-get install -y ros-melodic-pointcloud-to-laserscan
 RUN apt-get install -y ros-melodic-joint-state-controller
 
 WORKDIR /
+
+# Lean and mathlib install
+RUN rm -rf /root/.elan
+RUN rm -rf /root/*
+RUN rm /usr/bin/lean*
+RUN wget -q https://raw.githubusercontent.com/leanprover-community/mathlib-tools/master/scripts/install_debian.sh
+RUN bash install_debian.sh
+RUN rm -f install_debian.sh
+ENV LEAN_PATH /root/.elan/toolchains/stable/lib/lean/library:/root/.lean/_target/deps/mathlib/src
+ENV PATH=/root/.elan/bin:${PATH}
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+RUN leanproject global-install
