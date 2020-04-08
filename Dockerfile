@@ -82,9 +82,6 @@ RUN apt-get install -y ros-melodic-joint-state-controller
 WORKDIR /
 
 # Lean and mathlib install
-RUN rm -rf /root/.elan
-RUN rm -rf /root/*
-RUN rm /usr/bin/lean*
 RUN wget -q https://raw.githubusercontent.com/leanprover-community/mathlib-tools/master/scripts/install_debian.sh
 RUN bash install_debian.sh
 RUN rm -f install_debian.sh
