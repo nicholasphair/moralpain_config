@@ -37,8 +37,8 @@ RUN mkdir -p /llvm/build
 WORKDIR /llvm/build
 RUN cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON .. && cmake --build .
 RUN apt-get -y install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm gdb gdbserver
-RUN git clone --progress --verbose \
-    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
+#RUN git clone --progress --verbose \
+#    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -DCPACK_PACKAGING_INSTALL_PREFIX=/usr/lib && make install
 
 WORKDIR /root
 #COPY ./build.sh .
@@ -86,6 +86,11 @@ RUN apt-get install -y ros-melodic-gazebo-ros-control
 RUN apt-get install -y ros-melodic-diff-drive-controller
 RUN apt-get install -y ros-melodic-pointcloud-to-laserscan
 RUN apt-get install -y ros-melodic-joint-state-controller
+
+WORKDIR /root
+RUN git clone --progress --verbose \
+    https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DCHANGE_G3LOG_DEBUG_TO_DBUG=ON && cmake --build . --config Release && cmake --build . --target install
+
 
 WORKDIR /
 
