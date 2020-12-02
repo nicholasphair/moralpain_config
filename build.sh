@@ -1,23 +1,18 @@
-# If the LLVM build folder doesn't exist yet, create it.
-if [[ ! -d /llvm/build ]]; then 
-  echo '===---------- Creating /llvm/build folder ----------==='
-  mkdir -p /llvm/build
+#! /bin/bash
+
+apt-get install -y git curl python3 python3-pip python3-venv
+# The following test is needed in case VScode was installed by other
+# means (e.g. using Ubuntu snap)
+if ! which code; then
+  wget -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868
+  sudo apt-get install -y ./code.deb
+  rm code.deb
 fi
-
-# Find out what clang is called on here.
-which clang++-3.9
-if [[ $? -eq 0 ]]; then
-  export CXX=clang++-3.9
-else
-  export CXX=clang++
-fi
-                           
-# If the folder is empty, build it.
-echo '===---------- Building LLVM and clang ----------==='
-cd /llvm/build
-
-cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_BOOTSTRAP=On -DCMAKE_C_COMPILER=$C -DCMAKE_CXX_COMPILER=$CXX -LLVM_USE_LINKER=gnu.ld -LLVM_PARALLEL_LINK_JOBS=1 -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_EH=ON ..
-
-ninja stage2
-
-cmake --build . 
+code --install-extension jroesch.lean
+wget https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh
+bash elan-init.sh -y
+rm elan-init.sh
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+. ~/.profile
+pipx install mathlibtools
