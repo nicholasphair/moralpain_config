@@ -1,5 +1,7 @@
 # Peirce Docker Builder
 
+Make sure that you're logged in (docker login)
+
 To build and push docker image, all you need to do is:
 
 1. docker build -t %name% . --m 16g
