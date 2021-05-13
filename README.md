@@ -1,3 +1,9 @@
 # Peirce Docker Builder
 
-Docker image builder for Peirce project.
+Make sure that you're logged in (docker login)
+
+To build and push docker image, all you need to do is:
+
+1. docker build -t %name% . --m 16g
+2. docker tag %name% andrewe8/peirce_docker
+3. docker push andrewe8/peirce_docker
