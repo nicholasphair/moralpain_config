@@ -118,3 +118,17 @@ RUN apt-get install -y clangd-9
 RUN apt-get install -y bear
 RUN apt-get update
 RUN apt-get install -y ros-melodic-map-server
+RUN apt-get install -y libconfig-dev
+RUN apt-get install -y postgresql postgresql-contrib
+
+RUN apt-get install -y npm node-gyp nodejs-dev libssl1.0-dev
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+RUN /bin/bash -c "source /root/.nvm/nvm.sh"
+
+#RUN cd /peirce/Peirce-vscode-api
+#RUN pip install -r requirements.txt
+
+#RUN /bin/bash /peirce/Peirce-vscode/install.sh
+
+#RUN nvm install node
+#RUN nvm use node

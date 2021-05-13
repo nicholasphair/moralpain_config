@@ -17,4 +17,4 @@ python3 -m pipx ensurepath
 . ~/.profile
 echo 1
 find / | grep leanproject
-pipx install mathlibtools
+pipx install --force mathlibtools
