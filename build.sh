@@ -5,7 +5,7 @@ apt-get install -y git curl python3 python3-pip python3-venv
 # means (e.g. using Ubuntu snap)
 if ! which code; then
   wget -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868
-  sudo apt-get install -y ./code.deb
+  apt-get install -y ./code.deb
   rm code.deb
 fi
 code --install-extension jroesch.lean
@@ -15,6 +15,8 @@ rm elan-init.sh
 python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 . ~/.profile
-echo 1
-find / | grep leanproject
-pipx install --force mathlibtools
+#echo 1
+#find / | grep leanproject
+pipx install mathlibtools
+
+#! /bin/bash

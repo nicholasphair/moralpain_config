@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-MAINTAINER <cch3dc@virginia.edu>
+MAINTAINER <ae8rh@virginia.edu>
 WORKDIR /root
 COPY ./copyprofile.txt .
 RUN cat /root/copyprofile.txt > /root/.profile
@@ -92,26 +92,6 @@ WORKDIR /root
 RUN git clone --progress --verbose \
     https://github.com/KjellKod/g3log.git && cd g3log && mkdir build && cd build && cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DCHANGE_G3LOG_DEBUG_TO_DBUG=ON && cmake --build . --config Release && cmake --build . --target install
 
-
-WORKDIR /
-
-# Lean and mathlib install
-RUN wget -q https://raw.githubusercontent.com/leanprover-community/mathlib-tools/master/scripts/install_debian.sh
-RUN bash install_debian.sh
-RUN rm -f install_debian.sh
-RUN apt-get -y install python-pip
-ENV PYTHONIOENCODING utf-8
-WORKDIR /root
-COPY ./build.sh .
-RUN ["chmod", "755","./build.sh"]
-RUN ["bash","./build.sh"]
-ENV LEAN_PATH /root/.elan/toolchains/stable/lib/lean/library:/root/.lean/_target/deps/mathlib/src
-ENV PATH=/root/.elan/bin:${PATH}
-ENV LC_ALL C.UTF-8
-ENV LANG C.UTF-8
-RUN ls /root/.local/bin/
-RUN /root/.local/bin/leanproject global-install
-
 RUN apt-get install -y mono-complete
 
 RUN apt-get install -y clangd-9 
@@ -124,6 +104,41 @@ RUN apt-get install -y postgresql postgresql-contrib
 RUN apt-get install -y npm node-gyp nodejs-dev libssl1.0-dev
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
 RUN /bin/bash -c "source /root/.nvm/nvm.sh"
+
+WORKDIR /
+
+ENV PYTHONIOENCODING utf-8
+WORKDIR /root
+COPY ./build.sh .
+RUN ["chmod", "755","./build.sh"]
+RUN ["bash","./build.sh"]
+ENV LEAN_PATH /root/.elan/toolchains/stable/lib/lean/library:/root/.lean/_target/deps/mathlib/src
+ENV PATH=/root/.elan/bin:${PATH}
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+RUN ls /root/.local/bin/
+RUN /root/.local/bin/leanproject global-install
+
+#RUN /bin/bash -c "source nvm install node"
+#RUN /bin/bash -c "soruce nvm use node"
+
+# Lean and mathlib install
+#RUN wget -q https://raw.githubusercontent.com/leanprover-community/mathlib-tools/master/scripts/install_debian.sh
+#RUN bash install_debian.sh
+#RUN rm -f install_debian.sh
+#RUN apt-get -y install python-pip
+#ENV PYTHONIOENCODING utf-8
+#WORKDIR /root
+#COPY ./build.sh .
+#RUN ["chmod", "755","./build.sh"]
+#RUN ["bash","./build.sh"]
+#ENV LEAN_PATH /root/.elan/toolchains/stable/lib/lean/library:/root/.lean/_target/deps/mathlib/src
+#ENV PATH=/root/.elan/bin:${PATH}
+#ENV LC_ALL C.UTF-8
+#ENV LANG C.UTF-8
+#RUN ls /root/.local/bin/
+#RUN /root/.local/bin/leanproject global-install
+
 
 #RUN cd /peirce/Peirce-vscode-api
 #RUN pip install -r requirements.txt
