@@ -74,6 +74,11 @@ RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 RUN apt-get -y install python-rosinstall python-rosinstall-generator python-wstool build-essential
 
 # additional ROS packages for move-base/gazebo, etc.
+RUN apt-get update -y && apt-get install -y ros-melodic-tf
+RUN apt-get update -y && apt-get install -y ros-melodic-tf2
+RUN apt-get update -y && apt-get install -y ros-melodic-tf2-geometry-msgs
+
+
 RUN apt-get install -y ros-melodic-controller-manager
 RUN apt-get install -y ros-melodic-move-base
 RUN apt-get install -y ros-melodic-twist-mux
@@ -119,6 +124,7 @@ ENV LANG C.UTF-8
 RUN ls /root/.local/bin/
 RUN /root/.local/bin/leanproject global-install
 
+RUN apt-get update -y && apt-get install -y ros-melodic-tf2-geometry-msgs
 #RUN /bin/bash -c "source nvm install node"
 #RUN /bin/bash -c "soruce nvm use node"
 
