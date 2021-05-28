@@ -128,6 +128,9 @@ RUN apt-get update -y && apt-get install -y ros-melodic-tf2-geometry-msgs
 #RUN /bin/bash -c "source nvm install node"
 #RUN /bin/bash -c "soruce nvm use node"
 
+RUN pip3 install trio
+RUN pip3 install dataclasses
+
 # Lean and mathlib install
 #RUN wget -q https://raw.githubusercontent.com/leanprover-community/mathlib-tools/master/scripts/install_debian.sh
 #RUN bash install_debian.sh
