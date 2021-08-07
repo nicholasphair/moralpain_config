@@ -40,8 +40,8 @@ RUN apt-get install -y nodejs npm
 ENV PYTHONIOENCODING utf-8
 
 #Fix from here down with nice up-to-date Lean installation procedure
-RUN mkdir -m 0755 /nix && chown root /nix
-RUN curl -L https://nixos.org/nix/install | sh
+# RUN mkdir -m 0755 /nix && chown root /nix
+# RUN curl -L https://nixos.org/nix/install | sh
 
 COPY ./build.sh .
 RUN chmod 755 ./build.sh
