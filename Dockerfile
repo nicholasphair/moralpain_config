@@ -19,28 +19,28 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 # Seems like a no-op. Test later and delete if so.
 RUN apt-get install -y -q
 
-# Install packages.
+# Update Ubuntu
 RUN apt-get update  -y 
 RUN apt-get upgrade -y
-RUN apt-get install -y git cmake vim make wget gnupg apt-utils
-RUN apt-get install -y g++
+
+# Install development environment
 RUN apt-get -y install lsb-release
-RUN apt-get -y install python3-pip
 RUN apt-get -y install build-essential
-# RUN apt-get install -y mono-complete
-# RUN apt-get install -y bear
+RUN apt-get install -y git vim wget gnupg curl
+RUN apt-get -y install python3-pip
+RUN apt-get install -y libssl-dev libffi-dev python3-dev
 RUN apt-get install -y libconfig-dev
-RUN apt-get install -y postgresql postgresql-contrib
+# RUN apt-get install -y postgresql postgresql-contrib
 RUN apt-get install -y nodejs npm  
 # ... node-gyp libssl1.0-dev
 
-RUN curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh
-# RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
-RUN /bin/bash -c "source /root/.nvm/nvm.sh"
+# RUN curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh
+# RUN /bin/bash -c "source /root/.nvm/nvm.sh"
 
 ENV PYTHONIOENCODING utf-8
 
 #Fix from here down with nice up-to-date Lean installation procedure
+RUN mkdir -m 0755 /nix && chown root /nix
 RUN curl -L https://nixos.org/nix/install | sh
 
 COPY ./build.sh .
