@@ -37,12 +37,15 @@ RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add 
 RUN apt update && apt install -y code
 
 
+
 #Fix from here down with nice up-to-date Lean installation procedure
 # RUN mkdir -m 0755 /nix && chown root /nix
 # RUN curl -L https://nixos.org/nix/install | sh
 
 RUN wget https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh 
 RUN elan-init.sh -y && rm elan-init.sh
+
+RUN pipx install mathlibtools
 
 COPY ./build.sh .
 RUN chmod 755 ./build.sh
