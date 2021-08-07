@@ -10,7 +10,6 @@ build:
     - docker push gitlab.cs.virginia.edu:5099/physicalsemantics/peirce
     - docker tag dockerlocal gitlab.cs.virginia.edu:5099/physicalsemantics/peirce-docker-builder
     - docker push gitlab.cs.virginia.edu:5099/physicalsemantics/peirce-docker-builder
-
     - echo 1 > output.txt
 
   artifacts:
