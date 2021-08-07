@@ -1,6 +1,6 @@
 #! /bin/bash
 
-apt-get install -y git curl python3 python3-pip python3-venv
+
 # The following test is needed in case VScode was installed by other
 # means (e.g. using Ubuntu snap)
 if ! which code; then
