@@ -30,15 +30,10 @@ RUN apt-get upgrade -y
 RUN apt-get -y install lsb-release
 RUN apt-get -y install build-essential
 RUN apt-get install -y git vim wget gnupg curl
-RUN apt-get -y install python3-pip
-RUN apt-get install -y libssl-dev libffi-dev python3-dev
+RUN apt-get -y install python3-pip python3-venv python3-dev
+RUN apt-get install -y libssl-dev libffi-dev 
 RUN apt-get install -y libconfig-dev
-# RUN apt-get install -y postgresql postgresql-contrib
 RUN apt-get install -y nodejs npm  
-# ... node-gyp libssl1.0-dev
-
-# RUN curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh
-# RUN /bin/bash -c "source /root/.nvm/nvm.sh"
 
 ENV PYTHONIOENCODING utf-8
 
