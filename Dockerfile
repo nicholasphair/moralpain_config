@@ -20,8 +20,11 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 RUN apt-get install -y -q
 
 # Update Ubuntu
-RUN apt-get update  -y 
+# RUN apt-get update  -y 
+RUN apt-get -oDebug::pkgAcquire::Worker=1 update -y
 RUN apt-get upgrade -y
+
+
 
 # Install development environment
 RUN apt-get -y install lsb-release
