@@ -17,23 +17,16 @@ COPY ./.profile.txt /root/.profile
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Seems like a no-op. Test later and delete if so.
-RUN apt-get install -y -q
+# RUN apt-get install -y -q
 
 # Update Ubuntu
-# RUN apt-get update  -y 
-RUN apt-get -oDebug::pkgAcquire::Worker=1 update -y
-RUN apt-get upgrade -y
-
-
+RUN apt-get update  -y && apt-get upgrade -y
 
 # Install development environment
-RUN apt-get -y install lsb-release
-RUN apt-get -y install build-essential
-RUN apt-get install -y git vim wget gnupg curl
+RUN apt-get -y install lsb-release build-essential git vim wget gnupg curl
 RUN apt-get -y install python3-pip python3-venv python3-dev
-RUN apt-get install -y libssl-dev libffi-dev 
-RUN apt-get install -y libconfig-dev
-RUN apt-get install -y nodejs npm  
+RUN python3 -m pip install --user pipx && python3 -m pipx ensurepath
+RUN apt-get install -y libssl-dev libffi-dev libconfig-dev
 
 ENV PYTHONIOENCODING utf-8
 
