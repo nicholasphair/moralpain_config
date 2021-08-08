@@ -1,4 +1,4 @@
-# A stripped down builder of Linux images for Lean
+# A stripped down builder of Linux images for Lean Prover
 
 Make sure that you're logged in (docker login)
 
