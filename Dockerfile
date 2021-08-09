@@ -17,16 +17,16 @@ WORKDIR /root
 COPY ./.profile.txt /root/.profile
 VOLUME /dm
 
-# Install development environment platform
+# Install development platform and Python3
 RUN apt-get -y install lsb-release build-essential git vim wget gnupg curl python3-pip python3-venv python3-dev libssl-dev libffi-dev libconfig-dev
 ENV PYTHONIOENCODING utf-8
 RUN python3 -m pip install pipx
 RUN python3 -m pipx ensurepath --force 
 RUN . ~/.profile
-RUN apt install -y software-properties-common
-RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add - && \
-    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
-RUN apt update && apt install -y code
+# RUN apt install -y software-properties-common
+# RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add - && \
+#     add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+# RUN apt update && apt install -y code
 
 # Install Lean using elan
 RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y 
