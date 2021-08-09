@@ -40,5 +40,3 @@ To stop a running image, from a terminal on your host machine, do
 docker stop lean
 ```
 or issue the *exit* shell command from a terminal from the VM.
-
-
