@@ -30,6 +30,11 @@ docker run -it --cap-add=SYS_PTRACE --rm --security-opt seccomp=unconfined \
 Replace %source_directory_on_host% with the directory that you want open in
 the VM as the directory, /dm.
 
+To connect to a terminal shell into the VM, do this:
+``` sh
+docker exec -it lean /bin/bash
+```
+
 To stop a running image, from a terminal on your host machine, do
 ``` sh
 docker stop lean
