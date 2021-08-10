@@ -15,14 +15,14 @@ in to DockerHub.
 
 ## Build image from Dockerfile
 
-To build a new version of the clean_lean image, run
-the following command in a terminal with this directory
-as the current working directory:
+To build a new version of the clean_lean image, 
+run the following command in a terminal with this
+directory as the current working directory. The
+repository image name is kevinsullivan/clean_lean.
+It will have the tag, *latest*.
 ``` sh
 docker build -t kevinsullivan/clean_lean:latest . -m 8g
 ```
-The repository name of the image is kevinsullivan/clean_lean.
-It will have the tag, *latest*.
 
 ## Push image to DockerHub
 
