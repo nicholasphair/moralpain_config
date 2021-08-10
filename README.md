@@ -1,4 +1,4 @@
-# Ubuntu 20.04 with Lean Prover and mathlib
+# Ubuntu 20.04, Lean Prover 3 Community, mathlib
 
 This directory supports building of a docker
 image for using the Lean Prover with mathlib
