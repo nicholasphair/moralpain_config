@@ -47,7 +47,7 @@ Replace %source_directory_on_host% with the host directory you want
 the VM to access as /dm.
 ```
 docker run -it --cap-add=SYS_PTRACE --rm --security-opt seccomp=unconfined \
-    --name lean -v %source_directory_on_host%:/dm kevinsullivan/clean_lean \
+    --name clean_lean -v %source_directory_on_host%:/dm kevinsullivan/clean_lean \
     /bin/bash
 ```
 
