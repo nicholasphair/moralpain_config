@@ -3,19 +3,15 @@
 This directory supports building of a docker
 image for using the Lean Prover with mathlib
 on an Ubunty 20.04 platform, and pushing it 
-to DockerHub (a commercial image registry). 
+to DockerHub (a commercial image registry) so
+that others can pull it, exec it, and use it
+through VSCode to develop logic/code in Lean. 
 
-The container specified here minimally extends
-Ubuntu with what's needed and no more to provide
-a containerized environment for using VS Code
-to develop Lean on any computer running docker.
-
-The rest of this document explains the basic
-docker commands you will use in relation in 
-this project. We assume you've already got
-docker running on your computer. Make sure 
-you're logged in to DockerHub for all of the
-instructions here to work. 
+Here are the commands needed to buid, push
+(to DockerHub), and use our container. We
+assume you've already got docker running on
+your computer. Make sure that you're logged
+in to DockerHub. 
 
 ## For developers of this image
 ### Build image from Dockerfile
