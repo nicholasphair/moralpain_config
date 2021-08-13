@@ -14,7 +14,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8  
 WORKDIR /root  
-COPY ./.profile.txt /root/.profile
+# COPY .devcontainer/.profile.txt /root/.profile
 VOLUME /hostdir
 
 # Install development platform and Python3
