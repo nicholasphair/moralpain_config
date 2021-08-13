@@ -1,0 +1,10 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {}
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint"
+  ],
+  "forwardPorts": []
+}
