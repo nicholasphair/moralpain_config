@@ -3,51 +3,50 @@
 This directory supports building of a docker
 image for using the Lean Prover with mathlib
 on an Ubunty 20.04 platform, and pushing it 
-to DockerHub (a commercial image registry). 
+to DockerHub (a commercial image registry) so
+that others can pull it, exec it, and use it
+through VSCode to develop logic/code in Lean. 
 
-The container specified here minimally extends
-Ubuntu with what's needed and no more to provide
-a containerized environment for using VS Code
-to develop Lean on any computer running docker.
-
-The rest of this document explains the basic
-docker commands you will use in relation in 
-this project. We assume you've already got
-docker running on your computer. Make sure 
-you're logged in to DockerHub for all of the
-instructions here to work. 
+Here are the commands needed to buid, push
+(to DockerHub), and use our container. We
+assume you've already got docker running on
+your computer. Make sure that you're logged
+in to DockerHub. 
 
 ## Build image from Dockerfile
 
-To build a new version of the clean_lean image, run
-the following command in a terminal with this directory
-as the current working directory:
-``` sh
-docker build -t kevinsullivan/clean_lean:latest . -m 8g
-```
-The repository name of the image is kevinsullivan/clean_lean.
+To build a new version of the clean_lean image, 
+run the following command in a terminal with this
+directory as the current working directory. The
+repository image name is kevinsullivan/clean_lean.
 It will have the tag, *latest*.
+``` sh
+docker build -t kevinsullivan/leanvm:latest . -m 8g
+```
 
 ## Push image to DockerHub
 
 To push a copy of this image to dockerhub, do this:
 ``` sh
-docker push kevinsullivan/clean_lean
+docker push kevinsullivan/leanvm
 ```
 
 ## Pull image from DockerHub
 To pull a copy of the image to your local host machine, run: 
 ```sh
-docker pull kevinsullivan/clean_lean
+docker pull kevinsullivan/leanvm
 ```
 
 ## Start container
 To launch a container using this image run the following command.
 Replace %source_directory_on_host% with the host directory you want 
-the VM to access as /dm.
+the VM to access as /dm. Replace %container_name% with the name you'd
+like to give to the launched docker container. We suggest giving it 
+a name that reflects the local directory that is mounted on its
+container-local directory, /dm. 
 ```
 docker run -it --cap-add=SYS_PTRACE --rm --security-opt seccomp=unconfined \
-    --name clean_lean -v %source_directory_on_host%:/dm kevinsullivan/clean_lean \
+    --name %container_name% -v %source_directory_on_host%:/dm kevinsullivan/leanvm \
     /bin/bash
 ```
 
