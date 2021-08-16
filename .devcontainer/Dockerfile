@@ -18,6 +18,7 @@ WORKDIR /root
 VOLUME /hostdir
 
 # Install Python3
+RUN apt-get update --fix-missing
 RUN apt-get -y install lsb-release build-essential git vim wget gnupg curl python3-pip python3-venv python3-dev libssl-dev libffi-dev libconfig-dev
 ENV PYTHONIOENCODING utf-8
 RUN python3 -m pip install pipx
