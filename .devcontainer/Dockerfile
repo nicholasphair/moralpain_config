@@ -23,10 +23,6 @@ ENV PYTHONIOENCODING utf-8
 RUN python3 -m pip install pipx
 RUN python3 -m pipx ensurepath --force 
 RUN . ~/.profile
-# RUN apt install -y software-properties-common
-# RUN wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add - && \
-#     add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
-# RUN apt update && apt install -y code
 
 # Install Lean using elan
 RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y 
