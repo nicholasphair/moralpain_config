@@ -32,5 +32,6 @@ ENV PATH=/root/.elan/bin:${PATH}
 RUN pipx install mathlibtools
 RUN /root/.local/bin/leanproject global-install
 
-# That's it
-#
+# Install libraries needed by VSCode  
+# - support joining sessions using a browser link 
+RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
