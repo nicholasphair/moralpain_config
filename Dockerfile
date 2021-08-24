@@ -31,6 +31,10 @@ ENV LEAN_PATH /root/.elan/toolchains/stable/lib/lean/library:/root/.lean/_target
 ENV PATH=/root/.elan/bin:${PATH}
 RUN pipx install mathlibtools
 RUN /root/.local/bin/leanproject global-install
+RUN /root/.local/bin/leanproject upgrade-mathlib
+RUN /root/.local/bin/leanproject get-mathlib-cache
+RUN /root/.local/bin/leanproject build
+RUN /root/.local/bin/leanproject import-graph project_structure.dot
 
 # Install libraries needed by VSCode  
 # - support joining sessions using a browser link 
