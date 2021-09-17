@@ -19,15 +19,12 @@ WORKDIR /root
 VOLUME /hostdir
 
 # Stuff for Aaron's PDT class
-RUN apt-get install -y -q -q --no-install-recommends clang llvm emacs vim nasm astyle \
-        tofrodos source-highlight lsb-release build-essential gdb lldb doxygen doxygen-doc graphviz ddd git g++ \
-        gobjc gnustep gnustep-make gnustep-common libgnustep-base-dev evince g++-multilib \
-        libc6-dev-i386 libc6-dev flex make wget git gnupg curl python3-pip \
+RUN apt-get install -y -q -q --no-install-recommends base curl git \
+        unzip xz-utils zip libglu1-mesa emacs vim lsb-release build-essential \
+        gdb lldb doxygen doxygen-doc graphviz g++ gnustep gnustep-make \
+        gnustep-common libgnustep-base-dev evince g++-multilib \
+        libc6-dev-i386 libc6-dev flex make wget gnupg python3-pip \
         python3-venv python3-dev libssl-dev libffi-dev libconfig-dev&& \
-    update-alternatives --set cc /usr/bin/clang && \
-    update-alternatives --set c++ /usr/bin/clang++ && \
-    update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer \
-        /usr/bin/llvm-symbolizer-10 1000 && \
     touch /root/.bash_aliases && \
     echo "alias mv='mv -i'" >> /root/.bash_aliases && \
     echo "alias rm='rm -i'" >> /root/.bash_aliases && \
@@ -36,14 +33,6 @@ RUN apt-get install -y -q -q --no-install-recommends clang llvm emacs vim nasm a
     apt-get clean -y
 
 RUN . ~/.profile
-
-# Install Lean
-RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y 
-ENV LEAN_PATH /root/.elan/toolchains/stable/lib/lean/library:/root/.lean/_target/deps/mathlib/src
-ENV PATH=/root/.elan/bin:${PATH}
-RUN pipx install mathlibtools
-RUN /root/.local/bin/leanproject global-install
-RUN /root/.local/bin/leanproject upgrade-mathlib
 
 # Install libraries needed by VSCode  
 # - support joining sessions using a browser link 

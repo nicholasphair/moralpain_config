@@ -1,4 +1,4 @@
-# How to build pdrvm for Program and Data Representation
+# How to build moralpain for Program and Data Representation
 
 This directory supports building of a docker
 image for the class by Aaron Blumfield et al.
@@ -14,14 +14,14 @@ in to DockerHub.
 
 ## Build image from Dockerfile
 
-To build a new version of the pdrvm image,
+To build a new version of the moralpain image,
 run the following command in a terminal with this
 directory as the current working directory. The
-repository image name is kevinsullivan/pdrvm.
+repository image name is kevinsullivan/moralpain.
 It will have the tag, *latest*.
 
 ``` sh
-docker build -t kevinsullivan/pdrvm:latest . -m 8g
+docker build -t kevinsullivan/moralpain:latest . -m 8g
 ```
 
 ## Push image to DockerHub
@@ -29,7 +29,7 @@ docker build -t kevinsullivan/pdrvm:latest . -m 8g
 To push a copy of this image to dockerhub, do this:
 
 ``` sh
-docker push kevinsullivan/pdrvm
+docker push kevinsullivan/moralpain
 ```
 
 ## Pull image from DockerHub
@@ -37,7 +37,7 @@ docker push kevinsullivan/pdrvm
 To pull a copy of the image to your local host machine, run:
 
 ```sh
-docker pull kevinsullivan/leanvm
+docker pull kevinsullivan/moralpain
 ```
 
 ## Start container
@@ -51,7 +51,7 @@ container-local directory, /dm.
 
 ``` sh
 docker run -it --cap-add=SYS_PTRACE --rm --security-opt seccomp=unconfined \
-    --name %container_name% -v %source_directory_on_host%:/dm kevinsullivan/pdrvm \
+    --name %container_name% -v %source_directory_on_host%:/dm kevinsullivan/moralpain \
     /bin/bash
 ```
 
@@ -60,7 +60,7 @@ docker run -it --cap-add=SYS_PTRACE --rm --security-opt seccomp=unconfined \
 To connect to a terminal shell into the VM, do this:
 
 ``` sh
-docker exec -it pdrvm /bin/bash
+docker exec -it moralpain /bin/bash
 ```
 
 ## Stop running container
