@@ -16,15 +16,15 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8  
 WORKDIR /root  
 # COPY .devcontainer/.profile.txt /root/.profile
-VOLUME /hostdir
+# VOLUME /hostdir
 
 # Stuff for Aaron's PDT class
-RUN apt-get install -y -q -q --no-install-recommends base curl git \
-        unzip xz-utils zip libglu1-mesa emacs vim lsb-release build-essential \
-        gdb lldb doxygen doxygen-doc graphviz g++ gnustep gnustep-make \
-        gnustep-common libgnustep-base-dev evince g++-multilib \
-        libc6-dev-i386 libc6-dev flex make wget gnupg python3-pip \
-        python3-venv python3-dev libssl-dev libffi-dev libconfig-dev&& \
+RUN apt update && apt install -y -q -q --no-install-recommends base curl git \
+    unzip xz-utils zip libglu1-mesa emacs vim lsb-release build-essential \
+    gdb lldb doxygen doxygen-doc graphviz g++ gnustep gnustep-make \
+    openjdk-8-jdk gnustep-common libgnustep-base-dev evince g++-multilib \
+    libc6-dev-i386 libc6-dev flex make wget gnupg python3-pip \
+    python3-venv python3-dev libssl-dev libffi-dev libconfig-dev&& \
     touch /root/.bash_aliases && \
     echo "alias mv='mv -i'" >> /root/.bash_aliases && \
     echo "alias rm='rm -i'" >> /root/.bash_aliases && \
@@ -37,3 +37,4 @@ RUN . ~/.profile
 # Install libraries needed by VSCode  
 # - support joining sessions using a browser link 
 RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
+
