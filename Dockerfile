@@ -1,11 +1,14 @@
 # Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
 FROM ubuntu:20.04
 
-WORKDIR /opt
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 RUN apt-get update && apt-get install -y \
     git-lfs \
     pkg-config
+
+WORKDIR /opt
 
 # Install libraries needed by VSCode.
 ADD https://aka.ms/vsls-linux-prereq-script /opt
