@@ -1,16 +1,11 @@
 # How to build moralpain for Program and Data Representation
+This directory supports building of a docker image for the moralpain project to
+DockerHub (a commercial image registry) so that others can pull it, exec it,
+and use it through VSCode.
 
-This directory supports building of a docker
-image for the class by Aaron Blumfield et al.
-to DockerHub (a commercial image registry) so
-that others can pull it, exec it, and use it
-through VSCode.
-
-Here are the commands needed to buid, push
-(to DockerHub), and use our container. We
-assume you've already got docker running on
-your computer. Make sure that you're logged
-in to DockerHub.
+Here are the commands needed to buid, push (to DockerHub), and use our
+container. We assume you've already got docker running on your computer. Make
+sure that you're logged in to DockerHub.
 
 ## Build image from Dockerfile
 
@@ -68,7 +63,7 @@ docker exec -it moralpain /bin/bash
 To stop a container from a terminal on your host machine, do this:
 
 ``` sh
-docker stop lean
+docker stop %container_name%
 ```
 
 To stop a running image from a terminal into the container, exit the terminal process:
