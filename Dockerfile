@@ -1,5 +1,6 @@
 # Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
-FROM ubuntu:20.04
+FROM androidsdk/android-30
+
 
 WORKDIR /opt
 
