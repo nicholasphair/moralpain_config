@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Client application.
+cd "${WORKSPACE_FOLDER}/moraldistress"
+flutter pub get
+
+# Dart API client.
+cd "${WORKSPACE_FOLDER}/api"
+flutter pub get
+
+# Admin application.
+cd "${WORKSPACE_FOLDER}/infrastructue/site"
+flutter pub get

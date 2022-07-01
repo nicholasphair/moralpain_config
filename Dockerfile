@@ -22,6 +22,8 @@ RUN tar xJvf /opt/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 ENV PATH="/opt/flutter/bin:${PATH}"
 RUN flutter doctor
 
+COPY bin /opt/
+
 ENTRYPOINT ["flutter"]
 CMD ["doctor"]
 
