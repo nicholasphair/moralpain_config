@@ -26,4 +26,3 @@ COPY bin /opt/
 
 ENTRYPOINT ["flutter"]
 CMD ["doctor"]
-

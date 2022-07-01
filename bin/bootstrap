@@ -9,5 +9,5 @@ cd "${WORKSPACE_FOLDER}/api"
 flutter pub get
 
 # Admin application.
-cd "${WORKSPACE_FOLDER}/infrastructue/site"
+cd "${WORKSPACE_FOLDER}/infrastructure/site"
 flutter pub get
