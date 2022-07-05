@@ -5,7 +5,7 @@ cd "${WORKSPACE_FOLDER}/moraldistress"
 flutter pub get
 
 # Dart API client.
-cd "${WORKSPACE_FOLDER}/api"
+cd "${WORKSPACE_FOLDER}/api/dart"
 flutter pub get
 
 # Admin application.
