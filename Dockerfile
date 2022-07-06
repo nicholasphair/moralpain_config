@@ -22,6 +22,12 @@ RUN tar xJvf /opt/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 ENV PATH="/opt/flutter/bin:${PATH}"
 RUN flutter doctor
 
+# AWS CLI.
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip" && \
+  unzip awscliv2.zip && \
+  ./aws/install && \
+  rm -r aws awscliv2.zip
+
 COPY bin /opt/
 
 ENTRYPOINT ["flutter"]
