@@ -25,6 +25,9 @@ To push a copy of this image to dockerhub, do this:
 
 ``` sh
 docker push kevinsullivan/moralpain
+?
+ghcr.io/kevinsullivan/moralpain_config:main
+
 ```
 
 ## Pull image from DockerHub
@@ -33,6 +36,7 @@ To pull a copy of the image to your local host machine, run:
 
 ```sh
 docker pull kevinsullivan/moralpain
+ghcr.io/kevinsullivan/moralpain_config:main
 ```
 
 ## Start container
