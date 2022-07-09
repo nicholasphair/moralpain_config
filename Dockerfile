@@ -1,5 +1,6 @@
 # Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
 FROM androidsdk/android-30
+LABEL org.opencontainers.image.description "Underlying environment for UVA's MoralPain project"
 
 WORKDIR /opt
 
