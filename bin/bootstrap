@@ -12,7 +12,7 @@ cd "${WORKSPACE_FOLDER}/api/dart"
 flutter pub get
 
 # Admin applications.
-cd "${WORKSPACE_FOLDER}/infrastructure/submission_site"
+cd "${WORKSPACE_FOLDER}/infrastructure/submissions_site"
 flutter pub get
 
 # Admin applications.
