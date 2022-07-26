@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+git config --global --add safe.directory /opt/flutter
+
 # Client application.
 cd "${WORKSPACE_FOLDER}/moraldistress"
 flutter pub get
@@ -8,6 +10,6 @@ flutter pub get
 cd "${WORKSPACE_FOLDER}/api/dart"
 flutter pub get
 
-# Admin application.
+# Admin applications.
 cd "${WORKSPACE_FOLDER}/infrastructure/site"
 flutter pub get
