@@ -96,6 +96,11 @@ RUN /root/.local/bin/leanproject upgrade-mathlib
 # - support joining sessions using a browser link 
 RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
 
+# Install TypeDB
+
+RUN apt-get -y install software-properties-common apt-transport-https
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
+RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
 
 ###
 ###
