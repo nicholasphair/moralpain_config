@@ -1,10 +1,19 @@
 # Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
 FROM androidsdk/android-30
 
+# Update and configure Ubuntu 
+RUN apt-get clean && apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y locales && locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8  
+
 WORKDIR /opt
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+# ENV DEBIAN_FRONTEND=noninteractive
+# ENV FRONTEND=noninteractive
+# RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 
 RUN apt-get update && apt-get install -y \
     git-lfs \
@@ -46,26 +55,9 @@ RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
 ADD https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz /opt
 RUN tar xzf amazon-corretto-8-x64-linux-jdk.tar.gz && \
     rm amazon-corretto-8-x64-linux-jdk.tar.gz
-ENV JAVA_HOME="/opt/amazon-corretto-8.332.08.1-linux-x64"
+ENV JAVA_HOME="amazon-corretto-8.332.08.1-linux-x64"
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
-###
-###
-###
-
-
-# Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
-
-# Extend Ubunto 20.04
-# FRONTEND=noninteractive
-# RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-
-# Update and configure Ubuntu 
-RUN apt-get clean && apt-get update -y && apt-get upgrade -y
-RUN apt-get install -y locales && locale-gen en_US.UTF-8  
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8  
 
 WORKDIR /root  
 # COPY .devcontainer/.profile.txt /root/.profile
@@ -101,10 +93,9 @@ RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vs
 RUN apt-get -y install software-properties-common apt-transport-https
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
 RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
+RUN apt update
+RUN apt-get -y install typedb-all=2.11.0 typedb-server=2.11.0 typedb-bin=2.9.0
 
-###
-###
-###
 
 COPY bin /opt/
 
