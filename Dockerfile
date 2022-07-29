@@ -52,11 +52,11 @@ RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
     rm aws-sam-cli-linux-x86_64.zip
 
 # Corretto 8.
-ADD https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz /opt
-RUN tar xzf amazon-corretto-8-x64-linux-jdk.tar.gz && \
-    rm amazon-corretto-8-x64-linux-jdk.tar.gz
-ENV JAVA_HOME="amazon-corretto-8.332.08.1-linux-x64"
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
+# ADD https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz /opt
+# RUN tar xzf amazon-corretto-8-x64-linux-jdk.tar.gz && \
+#     rm amazon-corretto-8-x64-linux-jdk.tar.gz
+# ENV JAVA_HOME="amazon-corretto-8.332.08.1-linux-x64"
+# ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 
 WORKDIR /root  
