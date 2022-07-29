@@ -52,12 +52,20 @@ RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
     rm aws-sam-cli-linux-x86_64.zip
 
 # Corretto 8.
-# ADD https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz /opt
-# RUN tar xzf amazon-corretto-8-x64-linux-jdk.tar.gz && \
-#     rm amazon-corretto-8-x64-linux-jdk.tar.gz
+# ADD https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz /opt
+# RUN tar xzf amazon-corretto-11-x64-linux-jdk.tar.gz && \
+#     rm amazon-corretto-11-x64-linux-jdk.tar.gz
 # ENV JAVA_HOME="amazon-corretto-8.332.08.1-linux-x64"
 # ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
+# Get dependencies
+RUN apt-get -y install software-properties-common apt-transport-https
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
+
+# Get AWS Java 18
+RUN wget -O- https://apt.corretto.aws/corretto.key | apt-key add - 
+RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
+RUN apt-get update; apt install -y java-18-amazon-corretto-jdk
 
 WORKDIR /root  
 # COPY .devcontainer/.profile.txt /root/.profile
@@ -90,8 +98,6 @@ RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vs
 
 # Install TypeDB
 
-RUN apt-get -y install software-properties-common apt-transport-https
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
 RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
 RUN apt update
 RUN apt-get -y install typedb-all=2.11.0 typedb-server=2.11.0 typedb-bin=2.9.0
