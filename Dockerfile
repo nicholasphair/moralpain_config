@@ -65,7 +65,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
 # Get AWS Java 18
 RUN wget -O- https://apt.corretto.aws/corretto.key | apt-key add - 
 RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
-RUN apt-get update; apt install -y java-18-amazon-corretto-jdk
+RUN apt-get update; apt install -y java-11-amazon-corretto-jdk
 
 WORKDIR /root  
 # COPY .devcontainer/.profile.txt /root/.profile
