@@ -62,7 +62,7 @@ RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
 RUN apt-get -y install software-properties-common apt-transport-https
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
 
-# Get AWS Java 18
+# Corretto 11: get AWS Java 11 (latest to support TypeDB)
 RUN wget -O- https://apt.corretto.aws/corretto.key | apt-key add - 
 RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
 RUN apt-get update; apt install -y java-11-amazon-corretto-jdk
@@ -73,7 +73,7 @@ VOLUME /hostdir
 
 # Install Python3
 RUN apt-get update --fix-missing
-RUN apt-get -y install lsb-release build-essential git vim wget gnupg curl python3-pip python3-venv python3-dev libssl-dev libffi-dev libconfig-dev
+RUN apt-get -y install lsb-release build-essential git vim wget gnupg curl python3-pip python3-venv python3-dev libssl-dev libffi-dev libconfig-dev zip unzip
 ENV PYTHONIOENCODING utf-8
 RUN python3 -m pip install pipx
 RUN python3 -m pipx ensurepath --force 
@@ -87,6 +87,9 @@ RUN pipx install mathlibtools
 RUN echo `ls /root/.local/bin/`
 RUN /root/.local/bin/leanproject global-install
 RUN /root/.local/bin/leanproject upgrade-mathlib
+
+# Java package manager (sdkman)
+RUN curl -s "https://get.sdkman.io" | bash
 
 #RUN /root/.local/bin/leanproject get-mathlib-cache
 #RUN /root/.local/bin/leanproject build
