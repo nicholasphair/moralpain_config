@@ -91,6 +91,9 @@ RUN /root/.local/bin/leanproject upgrade-mathlib
 # Java package manager (sdkman)
 RUN curl -s "https://get.sdkman.io" | bash
 
+# install gradle
+RUN sdk install gradle 7.5
+
 #RUN /root/.local/bin/leanproject get-mathlib-cache
 #RUN /root/.local/bin/leanproject build
 # RUN /root/.local/bin/leanproject import-graph project_structure.dot
