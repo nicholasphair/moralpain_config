@@ -8,6 +8,9 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8  
 
+# Use bash rather than sh to RUN commands in this Dockerfile
+SHELL ["/bin/bash", "-c"]
+
 WORKDIR /opt
 
 # ENV DEBIAN_FRONTEND=noninteractive
@@ -39,6 +42,7 @@ ADD https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/f
 RUN tar xJvf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz && \
     rm flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 ENV PATH="/opt/flutter/bin:${PATH}"
+RUN git config --global --add safe.directory /opt/flutter 
 RUN flutter doctor
 
 # AWS Cli.
@@ -89,10 +93,12 @@ RUN /root/.local/bin/leanproject global-install
 RUN /root/.local/bin/leanproject upgrade-mathlib
 
 # Java package manager (sdkman)
-RUN curl -s "https://get.sdkman.io" | bash
+RUN curl "https://get.sdkman.io" | bash
+RUN chmod a+x "$HOME/.sdkman/bin/sdkman-init.sh"
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle 7.5
 
 # install gradle
-RUN sdk install gradle 7.5
+# RUN sdk install gradle 7.5
 
 #RUN /root/.local/bin/leanproject get-mathlib-cache
 #RUN /root/.local/bin/leanproject build
