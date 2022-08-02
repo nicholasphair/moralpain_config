@@ -2,10 +2,22 @@
 FROM androidsdk/android-30
 LABEL org.opencontainers.image.description "Underlying environment for UVA's MoralPain project"
 
+# Update and configure Ubuntu 
+RUN apt-get clean && apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y locales && locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8  
+
+# Use bash rather than sh to RUN commands in this Dockerfile
+SHELL ["/bin/bash", "-c"]
+
 WORKDIR /opt
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+# ENV DEBIAN_FRONTEND=noninteractive
+# ENV FRONTEND=noninteractive
+# RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 
 RUN apt-get update && apt-get install -y \
     git-lfs \
@@ -31,6 +43,7 @@ ADD https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/f
 RUN tar xJvf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz && \
     rm flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 ENV PATH="/opt/flutter/bin:${PATH}"
+RUN git config --global --add safe.directory /opt/flutter 
 RUN flutter doctor
 
 # AWS Cli.
@@ -44,11 +57,64 @@ RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
     rm aws-sam-cli-linux-x86_64.zip
 
 # Corretto 8.
-ADD https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz /opt
-RUN tar xzf amazon-corretto-8-x64-linux-jdk.tar.gz && \
-    rm amazon-corretto-8-x64-linux-jdk.tar.gz
-ENV JAVA_HOME="/opt/amazon-corretto-8.332.08.1-linux-x64"
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
+# ADD https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz /opt
+# RUN tar xzf amazon-corretto-11-x64-linux-jdk.tar.gz && \
+#     rm amazon-corretto-11-x64-linux-jdk.tar.gz
+# ENV JAVA_HOME="amazon-corretto-8.332.08.1-linux-x64"
+# ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+# Get dependencies
+RUN apt-get -y install software-properties-common apt-transport-https
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
+
+# Corretto 11: get AWS Java 11 (latest to support TypeDB)
+RUN wget -O- https://apt.corretto.aws/corretto.key | apt-key add - 
+RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
+RUN apt-get update; apt install -y java-11-amazon-corretto-jdk
+
+WORKDIR /root  
+# COPY .devcontainer/.profile.txt /root/.profile
+VOLUME /hostdir
+
+# Install Python3
+RUN apt-get update --fix-missing
+RUN apt-get -y install lsb-release build-essential git vim wget gnupg curl python3-pip python3-venv python3-dev libssl-dev libffi-dev libconfig-dev zip unzip
+ENV PYTHONIOENCODING utf-8
+RUN python3 -m pip install pipx
+RUN python3 -m pipx ensurepath --force 
+RUN . ~/.profile
+
+# Install Lean
+RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y 
+ENV LEAN_PATH /root/.elan/toolchains/stable/lib/lean/library:/root/.lean/_target/deps/mathlib/src
+ENV PATH=/root/.elan/bin:${PATH}
+RUN pipx install mathlibtools
+RUN echo `ls /root/.local/bin/`
+RUN /root/.local/bin/leanproject global-install
+RUN /root/.local/bin/leanproject upgrade-mathlib
+
+# Java package manager (sdkman)
+RUN curl "https://get.sdkman.io" | bash
+RUN chmod a+x "$HOME/.sdkman/bin/sdkman-init.sh"
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle 7.5
+
+# install gradle
+# RUN sdk install gradle 7.5
+
+#RUN /root/.local/bin/leanproject get-mathlib-cache
+#RUN /root/.local/bin/leanproject build
+# RUN /root/.local/bin/leanproject import-graph project_structure.dot
+
+# Install libraries needed by VSCode  
+# - support joining sessions using a browser link 
+RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
+
+# Install TypeDB
+
+RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
+RUN apt update
+RUN apt-get -y install typedb-all=2.11.0 typedb-server=2.11.0 typedb-bin=2.9.0
+
 
 COPY bin /opt/
 
