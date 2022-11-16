@@ -1,5 +1,6 @@
 # Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
 FROM androidsdk/android-30
+LABEL org.opencontainers.image.description "Underlying environment for UVA's MoralPain project"
 
 # Update and configure Ubuntu 
 RUN apt-get clean && apt-get update -y && apt-get upgrade -y
@@ -55,21 +56,10 @@ RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
     ./sam-installation/install && \
     rm aws-sam-cli-linux-x86_64.zip
 
-# Corretto 8.
-# ADD https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz /opt
-# RUN tar xzf amazon-corretto-11-x64-linux-jdk.tar.gz && \
-#     rm amazon-corretto-11-x64-linux-jdk.tar.gz
-# ENV JAVA_HOME="amazon-corretto-8.332.08.1-linux-x64"
-# ENV PATH="${JAVA_HOME}/bin:${PATH}"
-
 # Get dependencies
 RUN apt-get -y install software-properties-common apt-transport-https
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
 
-# Corretto 11: get AWS Java 11 (latest to support TypeDB)
-RUN wget -O- https://apt.corretto.aws/corretto.key | apt-key add - 
-RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
-RUN apt-get update; apt install -y java-11-amazon-corretto-jdk
 
 WORKDIR /root  
 # COPY .devcontainer/.profile.txt /root/.profile
@@ -95,10 +85,10 @@ RUN /root/.local/bin/leanproject upgrade-mathlib
 # Java package manager (sdkman)
 RUN curl "https://get.sdkman.io" | bash
 RUN chmod a+x "$HOME/.sdkman/bin/sdkman-init.sh"
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle 7.5
-
-# install gradle
-# RUN sdk install gradle 7.5
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && \
+  sdk install gradle 7.5 && \
+  sdk install maven && \
+  sdk install java 11.0.17-amzn
 
 #RUN /root/.local/bin/leanproject get-mathlib-cache
 #RUN /root/.local/bin/leanproject build
@@ -108,11 +98,14 @@ RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle 7.5
 # - support joining sessions using a browser link 
 RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
 
-# Install TypeDB
-
+# Install TypeDB.
 RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
 RUN apt update
-RUN apt-get -y install typedb-all=2.11.0 typedb-server=2.11.0 typedb-bin=2.9.0
+RUN apt-get -y install \
+  typedb-all=2.11.0 \
+  typedb-server=2.11.0 \
+  typedb-bin=2.9.0 \
+  typedb-console=2.11.0
 
 
 COPY bin /opt/
