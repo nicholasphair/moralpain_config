@@ -56,13 +56,6 @@ RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
     ./sam-installation/install && \
     rm aws-sam-cli-linux-x86_64.zip
 
-# Corretto 11.
-ADD https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz /opt
-RUN tar xzf amazon-corretto-11-x64-linux-jdk.tar.gz && \
-    rm amazon-corretto-11-x64-linux-jdk.tar.gz
-ENV JAVA_HOME=/opt/amazon-corretto-11.0.16.8.1-linux-x64
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
-
 # Get dependencies
 RUN apt-get -y install software-properties-common apt-transport-https
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 8F3DA4B5E9AEF44C
@@ -92,10 +85,10 @@ RUN /root/.local/bin/leanproject upgrade-mathlib
 # Java package manager (sdkman)
 RUN curl "https://get.sdkman.io" | bash
 RUN chmod a+x "$HOME/.sdkman/bin/sdkman-init.sh"
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle 7.5
-
-# install gradle
-# RUN sdk install gradle 7.5
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && \
+  sdk install gradle 7.5 && \
+  sdk install maven && \
+  sdk install java 11.0.17-amzn
 
 #RUN /root/.local/bin/leanproject get-mathlib-cache
 #RUN /root/.local/bin/leanproject build
@@ -105,11 +98,14 @@ RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle 7.5
 # - support joining sessions using a browser link 
 RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
 
-# Install TypeDB
-
+# Install TypeDB.
 RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
 RUN apt update
-RUN apt-get -y install typedb-all=2.11.0 typedb-server=2.11.0 typedb-bin=2.9.0
+RUN apt-get -y install \
+  typedb-all=2.11.0 \
+  typedb-server=2.11.0 \
+  typedb-bin=2.9.0 \
+  typedb-console=2.11.0
 
 
 COPY bin /opt/
