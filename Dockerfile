@@ -19,11 +19,15 @@ WORKDIR /opt
 # RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Basic dependencies
-RUN apt-get update && apt-get -y install lsb-release build-essential git vim wget gnupg \
-    curl libssl-dev libffi-dev libconfig-dev zip unzip git-lfs pkg-config 
+RUN apt-get update && apt-get -y -q --no-install-recommends install \
+  apt-transport-https lsb-release build-essential git vim wget gnupg \
+  curl libssl-dev libffi-dev libconfig-dev zip unzip git-lfs pkg-config 
+
+
 
 # Python3
-RUN apt-get update && apt-get -y install python3.8 python3.8-distutils python3-pip python3-venv python3-dev 
+RUN apt-get update && apt-get -y install -q --no-install-recommends \
+  python3.8 python3.8-distutils python3-pip python3-venv python3-dev 
 RUN apt-get update --fix-missing
 ENV PYTHONIOENCODING utf-8
 RUN python3 -m pip install pipx
@@ -48,7 +52,9 @@ RUN flutter doctor
 
 # AWS Sceptre
 # Required markupsafe but >=2.0 breaks lots of stuff
-RUN python3.8 -m pip install MarkupSafe==1.1.1   
+# RUN python3.8 -m pip install MarkupSafe==1.1.1   
+RUN python3.8 -m pip install setuptools==21.2.1 
+#RUN python3.8 -m pip install setuptools.command.build
 RUN python3.8 -m pip install sceptre
 
 # AWS Cli.
@@ -93,7 +99,12 @@ RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && \
 
 # Install libraries needed by VSCode  
 # - support joining sessions using a browser link 
+WORKDIR /opt 
 RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
+ADD https://aka.ms/vsls-linux-prereq-script /opt
+RUN chmod 700 vsls-linux-prereq-script && \
+    ./vsls-linux-prereq-script && \
+    rm vsls-linux-prereq-script
 
 # Install TypeDB.
 RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
@@ -103,6 +114,24 @@ RUN apt-get -y install \
   typedb-server=2.11.0 \
   typedb-bin=2.9.0 \
   typedb-console=2.11.0
+
+# Install Node
+
+ENV NVM_DIR /usr/local/nvm 
+# or ~/.nvm , depending
+ENV NODE_VERSION 0.10.33
+
+# Install nvm with node and npm
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.20.0/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+
+# Finish Up
 
 COPY bin /opt/
 
