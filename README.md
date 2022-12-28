@@ -13,18 +13,17 @@ repository image name is kevinsullivan/moralpain.
 It will have the tag, *latest*.
 
 ``` sh
-docker build -t ghcr.io/kevinsullivan/moralpain:main . -m 8g
+docker build -t ghcr.io/kevinsullivan/moralpain_config:latest . -m 8g
 ```
 
 ## Push image to DockerHub
 
-To push a copy of this image to dockerhub, do this:
+To push a copy of this image to an image repository
+use docker push. Log in first if necessary.
 
 ``` sh
-docker push kevinsullivan/moralpain
-?
-ghcr.io/kevinsullivan/moralpain_config:main
-
+echo <GitHub PAT> | docker login ghcr.io -u myusername --password-stdin
+docker push ghcr.io/kevinsullivan/moralpain_config:latest
 ```
 
 ## Pull image from DockerHub
