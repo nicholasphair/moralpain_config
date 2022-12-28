@@ -8,7 +8,7 @@ you'll build the image to post to a registry.
 
 In devcontainer.json: 
 ```python    
-"image": "ghcr.io/kevinsullivan/moralpain_container:latest",
+"image": "ghcr.io/<github-username>/moralpain_container:latest",
 ```
 
 ## Build image from Dockerfile
