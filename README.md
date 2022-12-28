@@ -9,11 +9,11 @@ machine, on which you'll build the VM.
 
 Run the following command in a terminal with this
 directory as the current working directory. The
-repository image name is kevinsullivan/moralpain.
+repository image name is <github-username>/moralpain.
 It will have the tag, *latest*.
 
 ``` sh
-docker build -t ghcr.io/kevinsullivan/moralpain_config:latest . -m 8g
+docker build -t ghcr.io/<github-username>/moralpain_config:latest . -m 8g
 ```
 
 ## Push image to DockerHub
@@ -23,7 +23,7 @@ use docker push. Log in first if necessary.
 
 ``` sh
 echo <GitHub PAT> | docker login ghcr.io -u myusername --password-stdin
-docker push ghcr.io/kevinsullivan/moralpain_config:latest
+docker push ghcr.io/<github-username>/moralpain_config:latest
 ```
 
 ## Pull image from DockerHub
@@ -31,8 +31,8 @@ docker push ghcr.io/kevinsullivan/moralpain_config:latest
 To pull a copy of the image to your local host machine, run:
 
 ```sh
-docker pull kevinsullivan/moralpain
-ghcr.io/kevinsullivan/moralpain_config:main
+docker pull <github-username>/moralpain
+ghcr.io/<github-username>/moralpain_config:main
 ```
 
 ## Start container
@@ -46,7 +46,7 @@ container-local directory, /dm.
 
 ``` sh
 docker run -it --cap-add=SYS_PTRACE --rm --security-opt seccomp=unconfined \
-    --name %container_name% -v %source_directory_on_host%:/dm kevinsullivan/moralpain \
+    --name %container_name% -v %source_directory_on_host%:/dm <github-username>/moralpain \
     /bin/bash
 ```
 
