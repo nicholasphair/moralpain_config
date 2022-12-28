@@ -13,7 +13,7 @@ repository image name is kevinsullivan/moralpain.
 It will have the tag, *latest*.
 
 ``` sh
-docker build -t kevinsullivan/moralpain:latest . -m 8g
+docker build -t ghcr.io/kevinsullivan/moralpain:main . -m 8g
 ```
 
 ## Push image to DockerHub
