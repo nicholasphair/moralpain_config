@@ -27,7 +27,7 @@ RUN apt-get update && apt-get -y -q --no-install-recommends install \
 
 # Python3 -- BUG, getting python3.6 and python3.8, causing problems
 RUN apt-get update && apt-get -y install -q --no-install-recommends \
-  python3.8 python3.8-distutils python3-pip python3-venv python3-dev 
+  python3.8 python3.8-distutils python3-pip python3-venv python3.8-dev 
 RUN apt-get update --fix-missing
 ENV PYTHONIOENCODING utf-8
 RUN python3 -m pip install pipx
@@ -52,7 +52,7 @@ RUN flutter doctor
 
 # AWS Sceptre
 # Required markupsafe but >=2.0 breaks lots of stuff
-RUN python3.8 -m pip install MarkupSafe==1.1.1   
+RUN python3.8 -m pip install MarkupSafe==2.0   
 RUN python3.8 -m pip install setuptools==21.2.1 
 #RUN python3.8 -m pip install setuptools.command.build
 RUN python3.8 -m pip install sceptre
