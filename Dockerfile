@@ -25,7 +25,7 @@ RUN apt-get update && apt-get -y -q --no-install-recommends install \
 
 
 
-# Python3
+# Python3 -- BUG, getting python3.6 and python3.8, causing problems
 RUN apt-get update && apt-get -y install -q --no-install-recommends \
   python3.8 python3.8-distutils python3-pip python3-venv python3-dev 
 RUN apt-get update --fix-missing
@@ -38,21 +38,21 @@ RUN . ~/.profile
 # Libraries needed by VSCode.
 ADD https://aka.ms/vsls-linux-prereq-script /opt
 RUN chmod 700 vsls-linux-prereq-script && \
-    ./vsls-linux-prereq-script && \
-    rm vsls-linux-prereq-script
+  ./vsls-linux-prereq-script && \
+  rm vsls-linux-prereq-script
 
 # Flutter and Dart.
 ARG FLUTTER_VERSION=3.0.0
 ADD https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz /opt
 RUN tar xJvf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz && \
-    rm flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
+  rm flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 ENV PATH="/opt/flutter/bin:${PATH}"
 RUN git config --global --add safe.directory /opt/flutter 
 RUN flutter doctor
 
 # AWS Sceptre
 # Required markupsafe but >=2.0 breaks lots of stuff
-# RUN python3.8 -m pip install MarkupSafe==1.1.1   
+RUN python3.8 -m pip install MarkupSafe==1.1.1   
 RUN python3.8 -m pip install setuptools==21.2.1 
 #RUN python3.8 -m pip install setuptools.command.build
 RUN python3.8 -m pip install sceptre
@@ -64,8 +64,8 @@ RUN unzip awscliv2.zip && ./aws/install && rm -r aws awscliv2.zip
 # AWS SAM.
 ADD https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip /opt
 RUN unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && \
-    ./sam-installation/install && \
-    rm aws-sam-cli-linux-x86_64.zip
+  ./sam-installation/install && \
+  rm aws-sam-cli-linux-x86_64.zip
 
 # Get dependencies
 RUN apt-get -y install software-properties-common apt-transport-https
@@ -103,8 +103,8 @@ WORKDIR /opt
 RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
 ADD https://aka.ms/vsls-linux-prereq-script /opt
 RUN chmod 700 vsls-linux-prereq-script && \
-    ./vsls-linux-prereq-script && \
-    rm vsls-linux-prereq-script
+  ./vsls-linux-prereq-script && \
+  rm vsls-linux-prereq-script
 
 # Install TypeDB.
 RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
@@ -123,10 +123,10 @@ ENV NODE_VERSION 0.10.33
 
 # Install nvm with node and npm
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.20.0/install.sh | bash \
-    && . $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
+  && . $NVM_DIR/nvm.sh \
+  && nvm install $NODE_VERSION \
+  && nvm alias default $NODE_VERSION \
+  && nvm use default
 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
