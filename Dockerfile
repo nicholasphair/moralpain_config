@@ -131,6 +131,8 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.20.0/install.sh | b
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
 
+RUN python3.8 -m pip install regex
+
 # Finish Up
 
 COPY bin /opt/
