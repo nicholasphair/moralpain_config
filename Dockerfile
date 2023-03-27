@@ -23,7 +23,15 @@ RUN apt-get update && apt-get -y -q --no-install-recommends install \
   apt-transport-https lsb-release build-essential git vim wget gnupg \
   curl libssl-dev libffi-dev libconfig-dev zip unzip git-lfs pkg-config 
 
+# Needed for Ur etc.
+RUN apt-get update && apt-get install -y -q --no-install-recommends autoconf automake libtool cmake autoconf-archive \
+  build-essential mlton libicu-dev
 
+# Libraries needed by VSCode.
+ADD https://aka.ms/vsls-linux-prereq-script /opt
+RUN chmod 700 vsls-linux-prereq-script && \
+  ./vsls-linux-prereq-script && \
+  rm vsls-linux-prereq-script
 
 # Python3 -- BUG, getting python3.6 and python3.8, causing problems
 RUN apt-get update && apt-get -y install -q --no-install-recommends \
@@ -33,13 +41,6 @@ ENV PYTHONIOENCODING utf-8
 RUN python3 -m pip install pipx
 RUN python3 -m pipx ensurepath --force 
 RUN . ~/.profile
-
-
-# Libraries needed by VSCode.
-ADD https://aka.ms/vsls-linux-prereq-script /opt
-RUN chmod 700 vsls-linux-prereq-script && \
-  ./vsls-linux-prereq-script && \
-  rm vsls-linux-prereq-script
 
 # Flutter and Dart.
 ARG FLUTTER_VERSION=3.0.0
