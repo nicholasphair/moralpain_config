@@ -43,7 +43,7 @@ RUN python3 -m pipx ensurepath --force
 RUN . ~/.profile
 
 # Flutter and Dart.
-ARG FLUTTER_VERSION=3.0.0
+ARG FLUTTER_VERSION=3.10.5
 ADD https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz /opt
 RUN tar xJvf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz && \
   rm flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
