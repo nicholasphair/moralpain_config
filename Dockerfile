@@ -27,12 +27,6 @@ RUN apt-get update && apt-get -y -q --no-install-recommends install \
 RUN apt-get update && apt-get install -y -q --no-install-recommends autoconf automake libtool cmake autoconf-archive \
   build-essential mlton libicu-dev
 
-# Libraries needed by VSCode.
-ADD https://aka.ms/vsls-linux-prereq-script /opt
-RUN chmod 700 vsls-linux-prereq-script && \
-  ./vsls-linux-prereq-script && \
-  rm vsls-linux-prereq-script
-
 # Python3 -- BUG, getting python3.6 and python3.8, causing problems
 RUN apt-get update && apt-get -y install -q --no-install-recommends \
   python3.8 python3.8-distutils python3-pip python3-venv python3.8-dev 
@@ -97,15 +91,6 @@ RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && \
 #RUN /root/.local/bin/leanproject get-mathlib-cache
 #RUN /root/.local/bin/leanproject build
 # RUN /root/.local/bin/leanproject import-graph project_structure.dot
-
-# Install libraries needed by VSCode  
-# - support joining sessions using a browser link 
-WORKDIR /opt 
-RUN wget -O ~/vsls-reqs https://aka.ms/vsls-linux-prereq-script && chmod +x ~/vsls-reqs && ~/vsls-reqs
-ADD https://aka.ms/vsls-linux-prereq-script /opt
-RUN chmod 700 vsls-linux-prereq-script && \
-  ./vsls-linux-prereq-script && \
-  rm vsls-linux-prereq-script
 
 # Install TypeDB.
 RUN add-apt-repository 'deb [ arch=all ] https://repo.vaticle.com/repository/apt/ trusty main'
