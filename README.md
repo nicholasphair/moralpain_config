@@ -1,30 +1,35 @@
-# How to build moralpain for Program and Data Representation
+# How to build and use the Moralpain development container
 This directory supports building of a docker image to support 
-development of the moralpain_dev project.
+development of the moralpain_dev project. Do not open this repo
+in a remote container. Open it on your local machine, on which
+you'll build the image to post to a registry. 
 
-Do not open this repo in a remote container. Open it on your local
-machine, on which you'll build the VM. 
+## To use this image
+
+In devcontainer.json: 
+```python    
+"image": "ghcr.io/<github-username>/moralpain_container:latest",
+```
 
 ## Build image from Dockerfile
 
 Run the following command in a terminal with this
 directory as the current working directory. The
-repository image name is kevinsullivan/moralpain.
+repository image name is <github-username>/moralpain.
 It will have the tag, *latest*.
 
 ``` sh
-docker build -t kevinsullivan/moralpain:latest . -m 8g
+docker build -t ghcr.io/<github-username>/moralpain_container:latest . -m 8g
 ```
 
 ## Push image to DockerHub
 
-To push a copy of this image to dockerhub, do this:
+To push a copy of this image to an image repository
+use docker push. Log in first if necessary.
 
 ``` sh
-docker push kevinsullivan/moralpain
-?
-ghcr.io/kevinsullivan/moralpain_config:main
-
+echo <GitHub PAT> | docker login ghcr.io -u myusername --password-stdin
+docker push ghcr.io/<github-username>/moralpain_container:latest
 ```
 
 ## Pull image from DockerHub
@@ -32,8 +37,8 @@ ghcr.io/kevinsullivan/moralpain_config:main
 To pull a copy of the image to your local host machine, run:
 
 ```sh
-docker pull kevinsullivan/moralpain
-ghcr.io/kevinsullivan/moralpain_config:main
+docker pull <github-username>/moralpain
+ghcr.io/<github-username>/moralpain_container:main
 ```
 
 ## Start container
@@ -47,7 +52,7 @@ container-local directory, /dm.
 
 ``` sh
 docker run -it --cap-add=SYS_PTRACE --rm --security-opt seccomp=unconfined \
-    --name %container_name% -v %source_directory_on_host%:/dm kevinsullivan/moralpain \
+    --name %container_name% -v %source_directory_on_host%:/dm <github-username>/moralpain \
     /bin/bash
 ```
 
