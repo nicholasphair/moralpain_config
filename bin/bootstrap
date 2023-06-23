@@ -1,24 +1,4 @@
 #!/usr/bin/env bash
 
-# Workaround for some ownership bug in Dockerfile.
-git config --global --add safe.directory /opt/flutter
-
 # Client application.
-cd "${WORKSPACE_FOLDER}/moraldistress"
-flutter pub get
-
-# Dart API client.
-cd "${WORKSPACE_FOLDER}/api/dart"
-flutter pub get
-
-# Admin applications.
-cd "${WORKSPACE_FOLDER}/infrastructure/submissions_site"
-flutter pub get
-
-# Admin applications.
-cd "${WORKSPACE_FOLDER}/infrastructure/analytics_site"
-flutter pub get
-
-# Admin applications.
-cd "${WORKSPACE_FOLDER}/infrastructure/collection_site"
-flutter pub get
+find ${WORKSPACE_FOLDER} -name pubspec.yaml -execdir flutter pub get \;
