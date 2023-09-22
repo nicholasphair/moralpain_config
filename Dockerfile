@@ -62,6 +62,10 @@ RUN curl "https://get.sdkman.io" | bash && \
       sdk install java 11.0.17-amzn
 ENV PATH $HOME/.local/bin:$PATH
 
+# Lean 4.
+RUN sh <(curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf) -y
+ENV PATH $HOME/.elan/bin:$PATH
+
 COPY bin /opt/
 
 WORKDIR $HOME/app
