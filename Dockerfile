@@ -1,5 +1,5 @@
 # Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
-FROM mobiledevops/flutter-sdk-image:3.10.3
+FROM mobiledevops/flutter-sdk-image:3.16.4
 LABEL org.opencontainers.image.description "Underlying environment for UVA's MoralPain project"
 
 ENV LANG en_US.UTF-8  
@@ -34,7 +34,7 @@ RUN apt-get update --fix-missing \
 RUN locale-gen en_US.UTF-8  
 
 USER mobiledevops
-RUN python3 -m pip install \
+RUN python3 -m pip install --break-system-package \
       sceptre-sam-handler \
       sceptre \
       sceptre-openapi-substitution-hook \
