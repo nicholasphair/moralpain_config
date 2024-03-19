@@ -6,6 +6,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8  
 ENV PYTHONIOENCODING utf-8
+ENV SHELL /bin/bash
 
 SHELL ["/bin/bash", "-c"]
 USER 0
