@@ -60,7 +60,7 @@ RUN curl "https://get.sdkman.io" | bash && \
       sdk install gradle 7.5 && \
       sdk install maven && \
       sdk install java 11.0.17-amzn
-ENV PATH $HOME/.local/bin:$PATH
+ENV PATH /root/.local/bin:$PATH
 
 COPY bin /opt/
 
