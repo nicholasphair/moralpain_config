@@ -1,5 +1,5 @@
 # Copyright © 2001 by the Rectors and Visitors of the University of Virginia. 
-FROM mobiledevops/flutter-sdk-image:3.16.4
+FROM ghcr.io/cirruslabs/flutter:3.22.1
 LABEL org.opencontainers.image.description "Underlying environment for UVA's MoralPain project"
 
 ENV LANG en_US.UTF-8  
@@ -34,22 +34,21 @@ RUN apt-get update --fix-missing \
       zip
 RUN locale-gen en_US.UTF-8  
 
-USER mobiledevops
-RUN python3 -m pip install --break-system-package \
-      sceptre-sam-handler \
-      sceptre \
-      sceptre-openapi-substitution-hook \
-      regex
+WORKDIR $HOME
+
+# Poetry.
+ADD --chown=root https://install.python-poetry.org python-poetry.py
+RUN python3 python-poetry.py && \
+      rm python-poetry.py
 
 # AWS Cli.
-WORKDIR $HOME
-ADD --chown=mobiledevops https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip awscliv2.zip
+ADD --chown=root https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip awscliv2.zip
 RUN unzip awscliv2.zip && \
       ./aws/install --bin-dir $HOME/.local/bin --install-dir $HOME/.local/lib && \
       rm -r aws awscliv2.zip
 
 # AWS SAM.
-ADD --chown=mobiledevops https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip samcli.zip
+ADD --chown=root https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip samcli.zip
 RUN unzip samcli.zip -d sam-installation && \
       ./sam-installation/install --bin-dir $HOME/.local/bin --install-dir $HOME/.local/lib && \
       rm -r sam-installation samcli.zip
@@ -62,10 +61,6 @@ RUN curl "https://get.sdkman.io" | bash && \
       sdk install maven && \
       sdk install java 11.0.17-amzn
 ENV PATH $HOME/.local/bin:$PATH
-
-# Lean 4.
-RUN sh <(curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf) -y
-ENV PATH $HOME/.elan/bin:$PATH
 
 COPY bin /opt/
 
