@@ -60,6 +60,11 @@ RUN curl "https://get.sdkman.io" | bash && \
       sdk install gradle 7.5 && \
       sdk install maven && \
       sdk install java 11.0.17-amzn
+
+# Add yq.
+ADD --chown=root https://github.com/mikefarah/yq/releases/download/v4.2.0/yq_linux_amd64.tar.gz yq.tar.gz
+RUN tar xzf yq.tar.gz && mv yq_linux_amd64 $HOME/.local/bin/yq
+
 ENV PATH /root/.local/bin:$PATH
 
 COPY bin /opt/
