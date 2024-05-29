@@ -52,6 +52,7 @@ ADD --chown=root https://github.com/aws/aws-sam-cli/releases/latest/download/aws
 RUN unzip samcli.zip -d sam-installation && \
       ./sam-installation/install --bin-dir $HOME/.local/bin --install-dir $HOME/.local/lib && \
       rm -r sam-installation samcli.zip
+ENV SAM_CLI_TELEMETRY 0
 
 # Java package manager (sdkman)
 RUN curl "https://get.sdkman.io" | bash && \
