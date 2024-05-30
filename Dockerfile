@@ -18,6 +18,7 @@ RUN apt-get update --fix-missing \
       git \
       git-lfs \
       gnupg \
+      less \
       libconfig-dev \
       libffi-dev \
       libssl-dev \
@@ -44,13 +45,17 @@ RUN python3 python-poetry.py && \
 # AWS Cli.
 ADD --chown=root https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip awscliv2.zip
 RUN unzip awscliv2.zip && \
-      ./aws/install --bin-dir $HOME/.local/bin --install-dir $HOME/.local/lib && \
+      ./aws/install \
+        --bin-dir $HOME/.local/bin \
+        --install-dir $HOME/.local/lib/aws-cli && \
       rm -r aws awscliv2.zip
 
 # AWS SAM.
 ADD --chown=root https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip samcli.zip
 RUN unzip samcli.zip -d sam-installation && \
-      ./sam-installation/install --bin-dir $HOME/.local/bin --install-dir $HOME/.local/lib && \
+      ./sam-installation/install \
+        --bin-dir $HOME/.local/bin \
+        --install-dir $HOME/.local/lib/aws-sam-cli && \
       rm -r sam-installation samcli.zip
 ENV SAM_CLI_TELEMETRY 0
 
@@ -65,6 +70,11 @@ RUN curl "https://get.sdkman.io" | bash && \
 # Add yq.
 ADD --chown=root https://github.com/mikefarah/yq/releases/download/v4.2.0/yq_linux_amd64.tar.gz yq.tar.gz
 RUN tar xzf yq.tar.gz && mv yq_linux_amd64 $HOME/.local/bin/yq
+
+# Add openapi-generator-cli.
+ADD --chown=root https://raw.githubusercontent.com/OpenAPITools/openapi-generator/master/bin/utils/openapi-generator-cli.sh openapi-generator-cli.sh
+RUN mv openapi-generator-cli.sh $HOME/.local/bin/openapi-generator-cli && \
+  chmod a+x $HOME/.local/bin/openapi-generator-cli
 
 ENV PATH /root/.local/bin:$PATH
 
