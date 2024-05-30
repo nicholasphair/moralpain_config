@@ -17,7 +17,7 @@ RUN apt-get update --fix-missing \
       curl \
       git \
       git-lfs \
-      gnupg \
+      gnupg2 \
       less \
       libconfig-dev \
       libffi-dev \
