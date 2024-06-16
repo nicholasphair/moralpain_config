@@ -76,6 +76,14 @@ ADD --chown=root https://raw.githubusercontent.com/OpenAPITools/openapi-generato
 RUN mv openapi-generator-cli.sh $HOME/.local/bin/openapi-generator-cli && \
   chmod a+x $HOME/.local/bin/openapi-generator-cli
 
+# Add TypeDB.
+ADD --chown=root https://repo.typedb.com/public/public-release/raw/names/typedb-console-linux-x86_64/versions/2.28.0/typedb-console-linux-x86_64-2.28.0.tar.gz typedb.tar.gz
+RUN mkdir $HOME/.local/lib/typedb && \
+      tar xzf typedb.tar.gz -C $HOME/.local/lib/typedb && \
+      ln -s $HOME/.local/lib/typedb/typedb-console-linux-x86_64-2.28.0/typedb $HOME/.local/bin/typedb && \
+      rm typedb.tar.gz
+
+
 ENV PATH /root/.local/bin:$PATH
 
 COPY bin /opt/
